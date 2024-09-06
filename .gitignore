@@ -1,6 +1,6 @@
 doxy/
-dict_example
-json_example
+example_dict
+example_json
 utest
 junk
 todo

@@ -261,6 +261,7 @@ void test_encode_decode(){
     object["outer"]["inner"]["value1"]="value1";
     object["outer"]["inner"]["value2"]="value2";
     object["outer"]["inner"]["value3"]="value3";
+    object["outer"]["inner"]["value4"];
 
     // Test original dictionary
     test("Original has N root items",object.size()==5);
@@ -272,10 +273,11 @@ void test_encode_decode(){
     test("Original object second string value",object["object"]["value2"].getstring()=="value2");
     test("Original object third string value",object["object"]["value3"].getstring()=="value3");
     test("Original nested object has N items",object["outer"].size()==1);
-    test("Original nested sub object has N items",object["outer"]["inner"].size()==3);
+    test("Original nested sub object has N items",object["outer"]["inner"].size()==4);
     test("Original nested sub object first value",object["outer"]["inner"]["value1"].getstring()=="value1");
     test("Original nested sub object second value",object["outer"]["inner"]["value2"].getstring()=="value2");
     test("Original nested sub object third value",object["outer"]["inner"]["value3"].getstring()=="value3");
+    test("Original nested sub object has null-object",object["outer"]["inner"].size()==4);
 
     // Parse to json, read back, and test new object
     njson json;
@@ -290,10 +292,11 @@ void test_encode_decode(){
     test("Reencoded object second string value",object["object"]["value2"].getstring()=="value2");
     test("Reencoded object third string value",object["object"]["value3"].getstring()=="value3");
     test("Reencoded nested object has N items",object["outer"].size()==1);
-    test("Reencoded nested sub object has N items",object["outer"]["inner"].size()==3);
+    test("Reencoded nested sub object has N items",object["outer"]["inner"].size()==4);
     test("Reencoded nested sub object first value",object["outer"]["inner"]["value1"].getstring()=="value1");
     test("Reencoded nested sub object second value",object["outer"]["inner"]["value2"].getstring()=="value2");
     test("Reencoded nested sub object third value",object["outer"]["inner"]["value3"].getstring()=="value3");
+    test("Reencoded nested sub object has null-object",object["outer"]["inner"].size()==4);
 }
 
 /*!\brief Test json-dictionary merging
@@ -305,6 +308,7 @@ void test_json_merge(){
     ogobject["bool"]=false;
     ogobject["string2"]="test";
     ogobject["outer"]["inner"]["value3"]="test";
+    ogobject["outer"]["inner"]["value5"];
 
     // Load a simple json string and merge it into the dictionary
     std::string text=""
@@ -317,6 +321,8 @@ void test_json_merge(){
         "       \"inner\" : {\n"
         "           \"value1\" : \"hello\",\n"
         "           \"value2\" : \"world\",\n"
+        "           \"value3\" : \"test\",\n"
+        "           \"value4\" : null,\n"
         "       }\n"
         "   }\n"
         "}\n";
@@ -330,6 +336,7 @@ void test_json_merge(){
     test("Destination got a copy of unique values",object["string"].getstring()=="string");
     test("Destination had matching values overwritten",object["bool"].getbool()==true);
     test("Destination retains nested unique values",object["outer"]["inner"]["value3"].getstring()=="test");
+    test("Destination successfully merged null values",object["outer"]["inner"].size()==5);
     test("Destination got a copy of nested unique values",object["outer"]["inner"]["value1"].getstring()=="hello");
     test("Destination got a copy of array",object["intarray"].size()==5);
     test("Destination got a copy of array values",object["intarray"][3].getint()==3);
