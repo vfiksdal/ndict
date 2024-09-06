@@ -9,7 +9,7 @@
 #include <vector>
 
 //! Declares version number. This is not used internally.
-#define NDICT_VERSION           "0.6.0"
+#define NDICT_VERSION           "0.7.0"
 
 //! Declare a maximum array size. Will throw an exception if out of bounds.
 #define NDICT_MAX_ARRAY_SIZE    1024
@@ -47,16 +47,22 @@ class ndict {
             TNULL       //!< Value is not valid
         } type=TNULL;
 
-        // Array and object accessors
-        unsigned size() const;
-        void clear();
-
         // Value accessors
         std::string getstring() const;
         const char *getchar() const;
         double getdouble() const;
         bool getbool() const;
         int getint() const;
+
+        // Array and object accessors
+        unsigned size() const;
+        void clear();
+
+        // Key accessors
+        std::vector<std::string> getkeys() const;
+
+        // Merge contents from a dict into this one
+        void merge(ndict &source);
 
         // Export to json string
         std::string getjson(const int &indent=4,const int &level=0) const;

@@ -306,3 +306,17 @@ std::string njson::encode(const ndict &dict){
     return dict.getjson();
 }
 
+/*!\brief Merges a JSON string with a dictionary object
+ * \param json JSON string to decode and merge
+ * \param dict Dictionary object to merge with
+ * \return A new merged object
+ *
+ * Throws njson_exception upon decoding errors
+ */
+ndict njson::merge(const std::string &json,const ndict &dict){
+    ndict newdict=decode(json);
+    ndict mrgdict=dict;
+    mrgdict.merge(newdict);
+    return mrgdict;
+}
+

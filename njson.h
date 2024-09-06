@@ -36,6 +36,8 @@ class njson {
         ndict read(const std::string &path);
         ndict decode(const std::string &json);
         std::string encode(const ndict &dict);
+        ndict merge(const std::string &json,const ndict &dict);
+
 };
 
 #endif

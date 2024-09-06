@@ -58,6 +58,23 @@ void test_dict(){
     test("Dictionary nested sub object first value",object["outer"]["inner"]["value1"].getstring()=="value1");
     test("Dictionary nested sub object second value",object["outer"]["inner"]["value2"].getstring()=="value2");
     test("Dictionary nested sub object third value",object["outer"]["inner"]["value3"].getstring()=="value3");
+
+    // Copy dict and retest
+    ndict copy=object;
+    test("Dictionary copy has N root items",copy.size()==5);
+    test("Dictionary copy string value",copy["string"].getstring()=="string");
+    test("Dictionary copy char value",copy["string"].getchar()==std::string("string"));
+    test("Dictionary copy int value",copy["int"].getint()==123);
+    test("Dictionary copy float value",copy["float"].getdouble()==123.456);
+    test("Dictionary copy object has N items",copy["object"].size()==3);
+    test("Dictionary copy object first string value",copy["object"]["value1"].getstring()=="value1");
+    test("Dictionary copy object second string value",copy["object"]["value2"].getstring()=="value2");
+    test("Dictionary copy object third string value",copy["object"]["value3"].getstring()=="value3");
+    test("Dictionary copy nested object has N items",copy["outer"].size()==1);
+    test("Dictionary copy nested sub object has N items",copy["outer"]["inner"].size()==3);
+    test("Dictionary copy nested sub object first value",copy["outer"]["inner"]["value1"].getstring()=="value1");
+    test("Dictionary copy nested sub object second value",copy["outer"]["inner"]["value2"].getstring()=="value2");
+    test("Dictionary copy nested sub object third value",copy["outer"]["inner"]["value3"].getstring()=="value3");
 }
 
 /*!\brief Test basic array handling
@@ -279,6 +296,48 @@ void test_encode_decode(){
     test("Reencoded nested sub object third value",object["outer"]["inner"]["value3"].getstring()=="value3");
 }
 
+/*!\brief Test json-dictionary merging
+ */
+void test_json_merge(){
+    // Create a simple dictionary
+    printf("\nRunning json-dictionary merging test:\n");
+    ndict ogobject;
+    ogobject["bool"]=false;
+    ogobject["string2"]="test";
+    ogobject["outer"]["inner"]["value3"]="test";
+
+    // Load a simple json string and merge it into the dictionary
+    std::string text=""
+        "{\n"
+        "   \"bool\" : true,\n"
+        "   \"string\" : \"string\",\n"
+        "   \"float\" : 123.456000,\n"
+        "   \"intarray\" : [0,1,2,3,4],\n"
+        "   \"outer\" : {\n"
+        "       \"inner\" : {\n"
+        "           \"value1\" : \"hello\",\n"
+        "           \"value2\" : \"world\",\n"
+        "       }\n"
+        "   }\n"
+        "}\n";
+
+    njson json;
+    ndict object=json.merge(text,ogobject);
+
+    // Test merged dictionary
+    test("Merged object has N root items",object.size()==6);
+    test("Destination retains unique values",object["string2"].getstring()=="test");
+    test("Destination got a copy of unique values",object["string"].getstring()=="string");
+    test("Destination had matching values overwritten",object["bool"].getbool()==true);
+    test("Destination retains nested unique values",object["outer"]["inner"]["value3"].getstring()=="test");
+    test("Destination got a copy of nested unique values",object["outer"]["inner"]["value1"].getstring()=="hello");
+    test("Destination got a copy of array",object["intarray"].size()==5);
+    test("Destination got a copy of array values",object["intarray"][3].getint()==3);
+    //printf("og:%s\n",ogobject.getjson().c_str());
+    //printf("src:%s\n",json.decode(text).getjson().c_str());
+    //printf("merged:%s\n",object.getjson().c_str());
+}
+
 /*!\brief Test error handling
  */
 void test_error(){
@@ -380,6 +439,7 @@ int main(){
     test_json_string();
     test_json_file();
     test_encode_decode();
+    test_json_merge();
     test_error();
     printf("\nPassed %d/%d tests\n",upassed,upassed+ufailed);
     if(ufailed==0){
@@ -388,6 +448,6 @@ int main(){
     else{
         printf("Failed %d tests!\n",ufailed);
     }
-    return 0;
+    return ufailed;
 }
 

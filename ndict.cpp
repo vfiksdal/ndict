@@ -120,6 +120,13 @@ void ndict::clear(){
     type=TNULL;
 }
 
+/*!\brief Get a copy of dictionary keys for external iteration
+ * \return Copy of dictionary keys for external iteration
+ */
+std::vector<std::string> ndict::getkeys() const{
+    return keys;
+}
+
 /*!\brief Get dictionary value as a string
  * \return String representation of value
  */
@@ -170,6 +177,24 @@ bool ndict::getbool() const{
     std::string v=value;
     std::transform(v.begin(),v.end(),v.begin(),::toupper);
     return v=="TRUE"?true:atoi(value.c_str());
+}
+
+/*!\brief Recursively merge keyed values from another dictionary
+ * \param source Dictionary object to copy values from
+ *
+ * Values unique to the source will be copied verbatim, existing values will
+ * be overwritten or retained depending on their existence in the source.
+ */
+void ndict::merge(ndict &source){
+    std::vector<std::string> keys=source.getkeys();
+    for(unsigned i=0;i<keys.size();i++){
+        if(source[keys[i]].type==ndict::TOBJECT){
+            (*this)[keys[i]].merge(source[keys[i]]);
+        }
+        else{
+            (*this)[keys[i]]=source[keys[i]];
+        }
+    }
 }
 
 /*!\brief Recursively encode dictionary object as a JSON string
