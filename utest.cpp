@@ -349,13 +349,39 @@ void test_error(){
     object["float"]=123.456;
 
     // Test dictionary
+#if !NDICT_CHECK_TYPE
     test("Dictionary string value resolves to 0 as int",object["string"].getint()==0);
     test("Dictionary string value resolves to 0 as float",object["string"].getdouble()==0);
     test("Dictionary string value resolves to false as bool",object["string"].getbool()==false);
+#else
+    {
+        bool result=false;
+        try{
+            std::string value=object["int"].getstring();
+        }
+        catch(ndict_exception e){
+            result=true;
+        }
+        test("Dictionary throws exception when accessing invalid type",result);
+    }
+#endif
+#if !NDICT_CHECK_EXISTING
     test("Invalid dictionary value resolves to empty string",object["invalid"].getstring()=="");
     test("Invalid dictionary value resolves to 0 as int",object["invalid"].getint()==0);
     test("Invalid dictionary value resolves to 0 as float",object["invalid"].getdouble()==0);
     test("Invalid dictionary value resolves to false as bool",object["invalid"].getbool()==0);
+#else
+    {
+        bool result=false;
+        try{
+            std::string value=object["dontexist"].getstring();
+        }
+        catch(ndict_exception e){
+            result=true;
+        }
+        test("Dictionary throws exception when accessing non-existing value",result);
+    }
+#endif
 
     // Test encoding with trailing comma
     njson json;
@@ -368,8 +394,8 @@ void test_error(){
             "   \"float\" : 123.456000,\n"
             "   \"intarray\" : [0,1,2,3,4],\n"
             "}\n";
-            object=json.decode(text);
-            test("Can decode json with trailing comma",object.size()==5);
+        object=json.decode(text);
+        test("Can decode json with trailing comma",object.size()==5);
     }
 
     // Test encoding with trailing trailing junk
@@ -383,13 +409,13 @@ void test_error(){
             "   \"float\" : 123.456000,\n"
             "   \"intarray\" : [0,1,2,3,4],\n"
             "}xx\n";
-            try{
-                object=json.decode(text);
-            }
-            catch(njson_exception e){
-                result=true;
-            }
-            test("Decoding json with trailing junk throws exception",result);
+        try{
+            object=json.decode(text);
+        }
+        catch(njson_exception e){
+            result=true;
+        }
+        test("Decoding json with trailing junk throws exception",result);
     }
 
     // Test encoding with trailing trailing junk
@@ -399,14 +425,14 @@ void test_error(){
             "{\n"
             "   \"bool\" : rue,\n"
             "}\n";
-            try{
-                object=json.decode(text);
-                printf("%s\n",object.getjson().c_str());
-            }
-            catch(njson_exception e){
-                result=true;
-            }
-            test("Decoding json with invalid keywords throws exception",result);
+        try{
+            object=json.decode(text);
+            printf("%s\n",object.getjson().c_str());
+        }
+        catch(njson_exception e){
+            result=true;
+        }
+        test("Decoding json with invalid keywords throws exception",result);
     }
 
     // Test encoding with trailing trailing junk
@@ -418,13 +444,13 @@ void test_error(){
             "   \"float\" : 123,456000,\n"
             "   \"intarray\" : [0,1,2,3,4],\n"
             "}\n";
-            try{
-                object=json.decode(text);
-            }
-            catch(njson_exception e){
-                result=true;
-            }
-            test("Decoding json with invalid decimal separator throws exception",result);
+        try{
+            object=json.decode(text);
+        }
+        catch(njson_exception e){
+            result=true;
+        }
+        test("Decoding json with invalid decimal separator throws exception",result);
     }
 }
 

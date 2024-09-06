@@ -25,7 +25,7 @@ int main(){
 
     // Read back values from new dictionary
     cout << "Values:" << endl;
-    cout << "int: " << cfg["int"].getstring() << endl;
+    cout << "int: " << cfg["int"].getint() << endl;
     cout << "string: " << cfg["string"].getstring() << endl;
     return 0;
 }

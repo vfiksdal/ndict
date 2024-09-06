@@ -131,6 +131,9 @@ std::vector<std::string> ndict::getkeys() const{
  * \return String representation of value
  */
 std::string ndict::getstring() const{
+#if NDICT_CHECK_EXISTING
+    if(type==TNULL) throw ndict_exception("Value is not set!");
+#endif
 #if NDICT_CHECK_TYPE
     if(type!=TSTRING) throw ndict_exception("Value is not string!");
 #endif
@@ -141,6 +144,9 @@ std::string ndict::getstring() const{
  * \return String representation of value
  */
 const char *ndict::getchar() const{
+#if NDICT_CHECK_EXISTING
+    if(type==TNULL) throw ndict_exception("Value is not set!");
+#endif
 #if NDICT_CHECK_TYPE
     if(type!=TSTRING) throw ndict_exception("Value is not string!");
 #endif
@@ -151,6 +157,9 @@ const char *ndict::getchar() const{
  * \return Integer representation of value (0 on failure)
  */
 int ndict::getint() const{
+#if NDICT_CHECK_EXISTING
+    if(type==TNULL) throw ndict_exception("Value is not set!");
+#endif
 #if NDICT_CHECK_TYPE
     if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
 #endif
@@ -161,6 +170,9 @@ int ndict::getint() const{
  * \return Float representation of value (0 on failure)
  */
 double ndict::getdouble() const{
+#if NDICT_CHECK_EXISTING
+    if(type==TNULL) throw ndict_exception("Value is not set!");
+#endif
 #if NDICT_CHECK_TYPE
     if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
 #endif
@@ -171,6 +183,9 @@ double ndict::getdouble() const{
  * \return Boolean representation of value (false on failure)
  */
 bool ndict::getbool() const{
+#if NDICT_CHECK_EXISTING
+    if(type==TNULL) throw ndict_exception("Value is not set!");
+#endif
 #if NDICT_CHECK_TYPE
     if(type!=TBOOL) throw ndict_exception("Value is not boolean!");
 #endif

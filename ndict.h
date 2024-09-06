@@ -14,8 +14,11 @@
 //! Declare a maximum array size. Will throw an exception if out of bounds.
 #define NDICT_MAX_ARRAY_SIZE    1024
 
+//! Throw an exception when accessing non-existing values
+#define NDICT_CHECK_EXISTING    true
+
 //! Enable strict type-checking when accessing values
-#define NDICT_CHECK_TYPE        false
+#define NDICT_CHECK_TYPE        true
 
 /*!\class ndict_exception
  * \brief Exception class for dictionary handling

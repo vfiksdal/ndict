@@ -19,7 +19,6 @@ dict["mystring"]="hello world!";
 dict["myint"]=123;
 
 printf("%s",dict["mystring"].getchar());
-printf("%s",dict["myint"].getchar());
 printf("%d",dict["myint"].getint());
 ```
 
