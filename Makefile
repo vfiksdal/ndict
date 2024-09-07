@@ -8,7 +8,7 @@ example_json: ndict.cpp ndict.h njson.cpp njson.h example_json.cpp
 
 
 utest: ndict.cpp ndict.h njson.cpp njson.h utest.cpp
-	g++ -o utest ndict.cpp njson.cpp utest.cpp
+	g++ -Wall -o utest ndict.cpp njson.cpp utest.cpp
 
 doxygen:
 	doxygen ndict.doxy

@@ -9,7 +9,7 @@ std::string njson::trim(std::string buffer){
     bool quoted=false;
     bool escaped=false;
     size_t size=0;
-    for(int i=0;i<buffer.size();i++){
+    for(unsigned i=0;i<buffer.size();i++){
         // Track quotation and escaped characters
         if(quoted && escaped){
             escaped=false;
@@ -201,7 +201,7 @@ void njson::parsevalue(ndict &object,std::string buffer){
         object=buffer.substr(1,buffer.size()-2);
     }
     if(type==ndict::TNUMBER){
-        if(buffer.find(".")==-1){
+        if(buffer.find(".")==std::string::npos){
             object=atoi(buffer.c_str());
         }
         else{
@@ -229,7 +229,7 @@ void njson::parseobject(ndict &object,std::string buffer){
     buffer=buffer.substr(1,buffer.size()-2);
 
     // Parse keyed values
-    int pos=0;
+    unsigned pos=0;
     while(pos<buffer.size()){
         // Parse key
         std::string value,key=parsequoted(buffer,pos);
@@ -272,10 +272,10 @@ ndict njson::read(const std::string &path){
     FILE *fd=fopen(path.c_str(),"r");
     if(fd){
         fseek(fd,0,SEEK_END);
-        int size=ftell(fd);
+        size_t size=ftell(fd);
         fseek(fd,0,SEEK_SET);
         char buffer[size+1];
-        fread(buffer,size,1,fd);
+        size=fread(buffer,1,size,fd);
         fclose(fd);
         buffer[size]=0;
         return decode(buffer);

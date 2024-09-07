@@ -366,7 +366,7 @@ void test_error(){
         try{
             std::string value=object["int"].getstring();
         }
-        catch(ndict_exception e){
+        catch(ndict_exception &e){
             result=true;
         }
         test("Dictionary throws exception when accessing invalid type",result);
@@ -383,7 +383,7 @@ void test_error(){
         try{
             std::string value=object["dontexist"].getstring();
         }
-        catch(ndict_exception e){
+        catch(ndict_exception &e){
             result=true;
         }
         test("Dictionary throws exception when accessing non-existing value",result);
@@ -419,7 +419,7 @@ void test_error(){
         try{
             object=json.decode(text);
         }
-        catch(njson_exception e){
+        catch(njson_exception &e){
             result=true;
         }
         test("Decoding json with trailing junk throws exception",result);
@@ -436,7 +436,7 @@ void test_error(){
             object=json.decode(text);
             printf("%s\n",object.getjson().c_str());
         }
-        catch(njson_exception e){
+        catch(njson_exception &e){
             result=true;
         }
         test("Decoding json with invalid keywords throws exception",result);
@@ -454,7 +454,7 @@ void test_error(){
         try{
             object=json.decode(text);
         }
-        catch(njson_exception e){
+        catch(njson_exception &e){
             result=true;
         }
         test("Decoding json with invalid decimal separator throws exception",result);
