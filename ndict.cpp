@@ -120,6 +120,16 @@ void ndict::clear(){
     type=TNULL;
 }
 
+/*!\brief Check if key is present in this object
+ * \return true if key was found with a valid value
+ */
+bool ndict::haskey(const std::string &key) const{
+    for(unsigned i=0;i<keys.size();i++){
+        if(keys[i]==key and items[i].type!=TNULL) return true;
+    }
+    return false;
+}
+
 /*!\brief Get a copy of dictionary keys for external iteration
  * \return Copy of dictionary keys for external iteration
  */
@@ -201,13 +211,12 @@ bool ndict::getbool() const{
  * be overwritten or retained depending on their existence in the source.
  */
 void ndict::merge(ndict &source){
-    std::vector<std::string> keys=source.getkeys();
-    for(unsigned i=0;i<keys.size();i++){
-        if(source[keys[i]].type==ndict::TOBJECT){
-            (*this)[keys[i]].merge(source[keys[i]]);
+    for(unsigned i=0;i<source.keys.size();i++){
+        if(source[source.keys[i]].type==ndict::TOBJECT){
+            (*this)[source.keys[i]].merge(source[source.keys[i]]);
         }
         else{
-            (*this)[keys[i]]=source[keys[i]];
+            (*this)[source.keys[i]]=source[source.keys[i]];
         }
     }
 }

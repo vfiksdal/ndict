@@ -60,7 +60,7 @@ void test_dict(){
     test("Dictionary nested sub object third value",object["outer"]["inner"]["value3"].getstring()=="value3");
 
     // Copy dict and retest
-    ndict copy=object;
+    ndict copy(object);
     test("Dictionary copy has N root items",copy.size()==5);
     test("Dictionary copy string value",copy["string"].getstring()=="string");
     test("Dictionary copy char value",copy["string"].getchar()==std::string("string"));

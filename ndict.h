@@ -9,7 +9,7 @@
 #include <vector>
 
 //! Declares version number. This is not used internally.
-#define NDICT_VERSION           "1.0.0"
+#define NDICT_VERSION           "1.0.1"
 
 //! Declare a maximum array size. Will throw an exception if out of bounds.
 #define NDICT_MAX_ARRAY_SIZE    1024
@@ -62,6 +62,7 @@ class ndict {
         void clear();
 
         // Key accessors
+        bool haskey(const std::string &key) const;
         std::vector<std::string> getkeys() const;
 
         // Merge contents from a dict into this one
