@@ -173,7 +173,7 @@ ndict::type_t njson::valuetype(std::string buffer){
         if(buffer[0]=='\"'){
             return ndict::TSTRING;
         }
-        else if(std::isdigit(buffer[0])){
+        else if(std::isdigit(buffer[0]) || buffer[0]=='-'){
             return ndict::TNUMBER;
         }
         else{

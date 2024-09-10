@@ -36,6 +36,7 @@ void test_dict(){
     object["string"]="string";
     object["int"]=123;
     object["float"]=123.456;
+    object["negative"]=-123456;
     object["object"]["value1"]="value1";
     object["object"]["value2"]="value2";
     object["object"]["value3"]="value3";
@@ -44,11 +45,12 @@ void test_dict(){
     object["outer"]["inner"]["value3"]="value3";
 
     // Test dictionary
-    test("Dictionary has N root items",object.size()==5);
+    test("Dictionary has N root items",object.size()==6);
     test("Dictionary string value",object["string"].getstring()=="string");
     test("Dictionary char value",object["string"].getchar()==std::string("string"));
     test("Dictionary int value",object["int"].getint()==123);
     test("Dictionary float value",object["float"].getdouble()==123.456);
+    test("Dictionary negative value",object["negative"].getint()==-123456);
     test("Dictionary object has N items",object["object"].size()==3);
     test("Dictionary object first string value",object["object"]["value1"].getstring()=="value1");
     test("Dictionary object second string value",object["object"]["value2"].getstring()=="value2");
@@ -61,7 +63,7 @@ void test_dict(){
 
     // Copy dict and retest
     ndict copy(object);
-    test("Dictionary copy has N root items",copy.size()==5);
+    test("Dictionary copy has N root items",copy.size()==6);
     test("Dictionary copy string value",copy["string"].getstring()=="string");
     test("Dictionary copy char value",copy["string"].getchar()==std::string("string"));
     test("Dictionary copy int value",copy["int"].getint()==123);
