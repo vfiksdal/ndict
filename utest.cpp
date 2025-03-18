@@ -247,7 +247,6 @@ void test_json_file(){
     test("Parsed sub-subobject third value",object["outer"]["inner"]["value3"].getstring()=="!!!");
 }
 
-
 /*!\brief Test dictionary-json-dictionary encoding/decoding
  */
 void test_encode_decode(){

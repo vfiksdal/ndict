@@ -137,20 +137,33 @@ void njson::parsearray(ndict &object,std::string buffer){
 
     // Parse block
     bool quoted=false;
+    int odepth=0;
     std::vector<std::string> array;
     std::string value;
     object=array;
     for(unsigned i=0;i<buffer.size();i++){
         // Track quotation and escaped characters
-        if(quoted && buffer[i]=='\"'){
-            quoted=false;
+        if(!odepth){
+            if(quoted && buffer[i]=='\"'){
+                quoted=false;
+            }
+            else if(!quoted && buffer[i]=='\"'){
+                quoted=true;
+            }
         }
-        else if(!quoted && buffer[i]=='\"'){
-            quoted=true;
+
+        // Track object depth
+        if(!quoted){
+            if(buffer[i]=='{' || buffer[i]=='['){
+                odepth++;
+            }
+            if(odepth && (buffer[i]=='}' || buffer[i]==']')){
+                odepth--;
+            }
         }
 
         // Check for separator
-        if(!quoted && buffer[i]==','){
+        if(!quoted && !odepth && buffer[i]==','){
             array.push_back(value);
             value.clear();
         }
@@ -170,7 +183,13 @@ void njson::parsearray(ndict &object,std::string buffer){
  */
 ndict::type_t njson::valuetype(std::string buffer){
     if(buffer.size()){
-        if(buffer[0]=='\"'){
+        if(buffer[0]=='{'){
+            return ndict::TOBJECT;
+        }
+        else if(buffer[0]=='['){
+            return ndict::TARRAY;
+        }
+        else if(buffer[0]=='\"'){
             return ndict::TSTRING;
         }
         else if(std::isdigit(buffer[0]) || buffer[0]=='-'){
@@ -197,6 +216,9 @@ ndict::type_t njson::valuetype(std::string buffer){
  */
 void njson::parsevalue(ndict &object,std::string buffer){
     ndict::type_t type=valuetype(buffer);
+    if(type==ndict::TOBJECT || type==ndict::TARRAY){
+        parseobject(object,buffer);
+    }
     if(type==ndict::TSTRING){
         object=buffer.substr(1,buffer.size()-2);
     }
