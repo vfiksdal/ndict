@@ -346,10 +346,10 @@ void test_json_merge(){
     //printf("merged:%s\n",object.getjson().c_str());
 }
 
-/*!\brief Test decoding of array of objects
+/*!\brief Test decoding of nested arrays/objects
  * \note This didn't work for v1.0.0
  */
-void test_array_of_objects(){
+void test_nested_objects(){
     // Load a simple json string and merge it into the dictionary
     printf("\nTesting decoding of array of objects:\n");
     std::string text=""
@@ -364,6 +364,37 @@ void test_array_of_objects(){
     test("Inner object 2 has 1 items",object["array"][1].size()==1);
     test("Inner object 1 has correctly decoded",object["array"][0]["a"].getstring()=="A");
     test("Inner object 2 has correctly decoded",object["array"][1]["b"].getstring()=="B");
+
+
+    printf("\nTesting decoding of array of arrays:\n");
+    text=""
+        "{\n"
+        "   \"array\" : [[1,2,3],[4,5,6],[7,8,9]]\n"
+        "}\n";
+    object=decoder.decode(text);
+    test("Root object has 1 items",object.size()==1);
+    test("Root array has 3 items",object["array"].size()==3);
+    test("Array item has 3 items",object["array"][0].size()==3);
+    test("Array contents is as expected",object["array"][0][0].getint()==1);
+    test("Array contents is as expected",object["array"][0][1].getint()==2);
+    test("Array contents is as expected",object["array"][0][2].getint()==3);
+    test("Array contents is as expected",object["array"][1][0].getint()==4);
+    test("Array contents is as expected",object["array"][1][1].getint()==5);
+    test("Array contents is as expected",object["array"][1][2].getint()==6);
+    test("Array contents is as expected",object["array"][2][0].getint()==7);
+    test("Array contents is as expected",object["array"][2][1].getint()==8);
+    test("Array contents is as expected",object["array"][2][2].getint()==9);
+
+    printf("\nTesting decoding of array of null-objects:\n");
+    text=""
+        "{\n"
+        "   \"array\" : [null,null]\n"
+        "}\n";
+    object=decoder.decode(text);
+    test("Root object has 1 items",object.size()==1);
+    test("Root array has 2 items",object["array"].size()==2);
+    test("Array contents is as expected",object["array"][0].type==ndict::TNULL);
+    test("Array contents is as expected",object["array"][1].type==ndict::TNULL);
 }
 
 /*!\brief Test error handling
@@ -494,7 +525,7 @@ int main(){
     test_json_file();
     test_encode_decode();
     test_json_merge();
-    test_array_of_objects();
+    test_nested_objects();
     test_error();
     printf("\nPassed %d/%d tests\n",upassed,upassed+ufailed);
     if(ufailed==0){

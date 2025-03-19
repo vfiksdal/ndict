@@ -216,12 +216,6 @@ ndict::type_t njson::valuetype(std::string buffer){
  */
 void njson::parsevalue(ndict &object,std::string buffer){
     ndict::type_t type=valuetype(buffer);
-    if(type==ndict::TOBJECT || type==ndict::TARRAY){
-        parseobject(object,buffer);
-    }
-    if(type==ndict::TSTRING){
-        object=buffer.substr(1,buffer.size()-2);
-    }
     if(type==ndict::TNUMBER){
         if(buffer.find(".")==std::string::npos){
             object=atoi(buffer.c_str());
@@ -230,10 +224,19 @@ void njson::parsevalue(ndict &object,std::string buffer){
             object=atof(buffer.c_str());
         }
     }
+    if(type==ndict::TSTRING){
+        object=buffer.substr(1,buffer.size()-2);
+    }
     if(type==ndict::TBOOL){
         std::string v=buffer;
         std::transform(v.begin(),v.end(),v.begin(),::toupper);
         object=(v=="TRUE")?true:false;
+    }
+    if(type==ndict::TARRAY){
+        parsearray(object,buffer);
+    }
+    if(type==ndict::TOBJECT){
+        parseobject(object,buffer);
     }
 }
 
