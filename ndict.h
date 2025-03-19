@@ -79,6 +79,7 @@ class ndict {
         ndict& operator=(const std::string &Value);
         ndict& operator=(const char *Value);
         ndict& operator=(const bool &Value);
+        ndict& operator=(const long int &Value);
         ndict& operator=(const int &Value);
         ndict& operator=(const unsigned int &Value);
         ndict& operator=(const double &Value);

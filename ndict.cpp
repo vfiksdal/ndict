@@ -9,31 +9,37 @@
  */
 ndict& ndict::operator=(const bool &Value) SET(TBOOL,Value?"true":"false")
 
-/*!\brief Assignemnt operator for boolean values
+/*!\brief Assignemnt operator for string values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const std::string &Value) SET(TSTRING,Value)
 
-/*!\brief Assignemnt operator for boolean values
+/*!\brief Assignemnt operator for character string values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const char *Value) SET(TSTRING,Value)
 
-/*!\brief Assignemnt operator for boolean values
+/*!\brief Assignemnt operator for long integer values
+ * \param Value Value to assign to dictionary object
+ * \return Reference to assigned dictionary object
+ */
+ndict& ndict::operator=(const long int &Value) SET(TNUMBER,std::to_string(Value))
+
+/*!\brief Assignemnt operator for integer values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const int &Value) SET(TNUMBER,std::to_string(Value))
 
-/*!\brief Assignemnt operator for boolean values
+/*!\brief Assignemnt operator for unsigned integer values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const unsigned int &Value) SET(TNUMBER,std::to_string(Value))
 
-/*!\brief Assignemnt operator for boolean values
+/*!\brief Assignemnt operator for double values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
