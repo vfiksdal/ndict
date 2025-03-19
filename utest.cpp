@@ -346,6 +346,26 @@ void test_json_merge(){
     //printf("merged:%s\n",object.getjson().c_str());
 }
 
+/*!\brief Test decoding of array of objects
+ * \note This didn't work for v1.0.0
+ */
+void test_array_of_objects(){
+    // Load a simple json string and merge it into the dictionary
+    printf("\nTesting decoding of array of objects:\n");
+    std::string text=""
+        "{\n"
+        "   \"array\" : [{\"a\":\"A\"},{\"b\":\"B\"}]\n"
+        "}\n";
+    njson decoder;
+    ndict object=decoder.decode(text);
+    test("Root object has 1 items",object.size()==1);
+    test("Array object has 2 items",object["array"].size()==2);
+    test("Inner object 1 has 1 items",object["array"][0].size()==1);
+    test("Inner object 2 has 1 items",object["array"][1].size()==1);
+    test("Inner object 1 has correctly decoded",object["array"][0]["a"].getstring()=="A");
+    test("Inner object 2 has correctly decoded",object["array"][1]["b"].getstring()=="B");
+}
+
 /*!\brief Test error handling
  */
 void test_error(){
@@ -474,6 +494,7 @@ int main(){
     test_json_file();
     test_encode_decode();
     test_json_merge();
+    test_array_of_objects();
     test_error();
     printf("\nPassed %d/%d tests\n",upassed,upassed+ufailed);
     if(ufailed==0){
