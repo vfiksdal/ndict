@@ -247,6 +247,27 @@ void test_json_file(){
     test("Parsed sub-subobject third value",object["outer"]["inner"]["value3"].getstring()=="!!!");
 }
 
+void test_compare(){
+    // Stage a simple dictionary object
+    printf("\nRunning value compare test:\n");
+    ndict object;
+    object["string"]="string";
+    object["stringint"]="123";
+    object["int"]=123;
+    object["float"]=123.456;
+    object["true"]=true;
+    object["false"]=false;
+
+    // Test original dictionary
+    test("Comparing string object to matching string",object["string"]==std::string("string"));
+    test("Comparing string object to mismatching string",object["string"]!=std::string("strinG"));
+    test("Comparing string object to matching cstring",object["string"]=="string");
+    test("Comparing string object to mismatching cstring",object["string"]!="strinG");
+    test("Comparing boolean object to matching value",object["true"]==true);
+    test("Comparing boolean object to mismatching value",object["false"]!=true);
+    test("Comparing boolean object to string",object["false"]!="true");
+}
+
 /*!\brief Test dictionary-json-dictionary encoding/decoding
  */
 void test_encode_decode(){
@@ -521,6 +542,7 @@ int main(){
     printf("Vegard Fiksdal (C) 2024\n");
     test_dict();
     test_array();
+    test_compare();
     test_json_string();
     test_json_file();
     test_encode_decode();

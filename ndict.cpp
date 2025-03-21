@@ -3,29 +3,84 @@
 #define QUOTE(STR)      (std::string("\"")+std::string(STR)+std::string("\""))
 #define SET(TYPE,VALUE) {type=TYPE; value=VALUE; return *this;}
 
+
+/*!\brief Comparison operator for dictionary object
+ * \param Value Dictionary object to compare to
+ * \return True if values are identical
+ */
+bool ndict::operator==(const ndict &Value) {return value==Value.value;}
+
+/*!\brief Comparison operator for string
+ * \param Value String to compare to
+ * \return True if values are identical
+ */
+bool ndict::operator==(const std::string &Value) {return value==Value;}
+
+/*!\brief Comparison operator for character string
+ * \param Value String to compare to
+ * \return True if values are identical
+ */
+bool ndict::operator==(const char *Value) {return value==Value;}
+
+/*!\brief Comparison operator for boolean
+ * \param Value Value to compare to
+ * \return True if values are identical
+ */
+bool ndict::operator==(const bool &Value) {try{return getbool()==Value;}catch(...){return false;}}
+
+/*!\brief Comparison operator for double
+ * \param Value Value to compare to
+ * \return True if values are identical
+ */
+bool ndict::operator==(const double &Value) {char *e; return strtod(value.c_str(),&e)==Value && e==0;}
+
+/*!\brief Comparison operator for integer
+ * \param Value Integer to compare to
+ * \return True if values are identical
+ */
+bool ndict::operator==(const int &Value) {char *e; return strtol(value.c_str(),&e,10)==Value && e==0;}
+
+/*!\brief Comparison operator for long integer
+ * \param Value Integer to compare to
+ * \return True if values are identical
+ */
+bool ndict::operator==(const long &Value) {char *e; return strtol(value.c_str(),&e,10)==Value && e==0;}
+
+/*!\brief Comparison operator for long long integer
+ * \param Value Integer to compare to
+ * \return True if values are identical
+ */
+bool ndict::operator==(const long long &Value) {char *e; return strtol(value.c_str(),&e,10)==Value && e==0;}
+
 /*!\brief Assignemnt operator for boolean values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const bool &Value) SET(TBOOL,Value?"true":"false")
 
-/*!\brief Assignemnt operator for string values
+/*!\brief Assignemnt operator for boolean values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const std::string &Value) SET(TSTRING,Value)
 
-/*!\brief Assignemnt operator for character string values
+/*!\brief Assignemnt operator for boolean values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const char *Value) SET(TSTRING,Value)
 
+/*!\brief Assignemnt operator for long long integer values
+ * \param Value Value to assign to dictionary object
+ * \return Reference to assigned dictionary object
+ */
+ndict& ndict::operator=(const long long &Value) SET(TNUMBER,std::to_string(Value))
+
 /*!\brief Assignemnt operator for long integer values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
-ndict& ndict::operator=(const long int &Value) SET(TNUMBER,std::to_string(Value))
+ndict& ndict::operator=(const long &Value) SET(TNUMBER,std::to_string(Value))
 
 /*!\brief Assignemnt operator for integer values
  * \param Value Value to assign to dictionary object
@@ -180,6 +235,32 @@ int ndict::getint() const{
     if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
 #endif
     return atoi(value.c_str());
+}
+
+/*!\brief Get dictionary value as a long integer
+ * \return Integer representation of value (0 on failure)
+ */
+int ndict::getlong() const{
+#if NDICT_CHECK_EXISTING
+    if(type==TNULL) throw ndict_exception("Value is not set!");
+#endif
+#if NDICT_CHECK_TYPE
+    if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
+#endif
+    return atol(value.c_str());
+}
+
+/*!\brief Get dictionary value as a long long integer
+ * \return Integer representation of value (0 on failure)
+ */
+int ndict::getlonglong() const{
+#if NDICT_CHECK_EXISTING
+    if(type==TNULL) throw ndict_exception("Value is not set!");
+#endif
+#if NDICT_CHECK_TYPE
+    if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
+#endif
+    return atoll(value.c_str());
 }
 
 /*!\brief Get dictionary value as a float

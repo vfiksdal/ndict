@@ -56,6 +56,8 @@ class ndict {
         double getdouble() const;
         bool getbool() const;
         int getint() const;
+        int getlong() const;
+        int getlonglong() const;
 
         // Array and object accessors
         unsigned size() const;
@@ -79,10 +81,22 @@ class ndict {
         ndict& operator=(const std::string &Value);
         ndict& operator=(const char *Value);
         ndict& operator=(const bool &Value);
-        ndict& operator=(const long int &Value);
+        ndict& operator=(const long &Value);
+        ndict& operator=(const long long &Value);
         ndict& operator=(const int &Value);
         ndict& operator=(const unsigned int &Value);
         ndict& operator=(const double &Value);
+
+        // Comparison operators
+        template<typename T> bool operator!=(const T &Value) {return !(*this==Value);}
+        bool operator==(const ndict &Value);
+        bool operator==(const std::string &Value);
+        bool operator==(const char *Value);
+        bool operator==(const bool &Value);
+        bool operator==(const long &Value);
+        bool operator==(const long long &Value);
+        bool operator==(const int &Value);
+        bool operator==(const double &Value);
 
         //! Operators to assign vector objects
         template<typename T,typename A> ndict& operator=(std::vector<T,A> const &Vector){
