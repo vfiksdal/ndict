@@ -50,7 +50,7 @@ bool ndict::operator==(const long &Value) {char *e; return strtol(value.c_str(),
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const long long &Value) {char *e; return strtol(value.c_str(),&e,10)==Value && e==0;}
+bool ndict::operator==(const long long &Value) {char *e; return strtoll(value.c_str(),&e,10)==Value && e==0;}
 
 /*!\brief Assignemnt operator for boolean values
  * \param Value Value to assign to dictionary object

@@ -534,6 +534,30 @@ void test_error(){
     }
 }
 
+void test_special(){
+    printf("\nTesting special cases:\n");
+
+    ndict object;
+    object["string"]="string";
+    object["int"]=123;
+    object["float"]=123.456;
+    object["true"]=true;
+    object["false"]=false;
+    object["array"][0]=1;
+    object["array"][1]=2;
+    object["array"][2]=3;
+
+    // Test original dictionary
+    test("Size of string object",object["string"].size()==0);
+    test("Size of double object",object["float"].size()==0);
+    test("Size of int object",object["int"].size()==0);
+    test("Size of boolean object",object["true"].size()==0);
+    test("Size of boolean object",object["false"].size()==0);
+    test("Size of unknown object",object["blabla"].size()==0);
+    test("Size of array object",object["array"].size()==3);
+
+}
+
 /*!\brief Run baby! RUN!
  */
 int main(){
@@ -543,6 +567,7 @@ int main(){
     test_dict();
     test_array();
     test_compare();
+    test_special();
     test_json_string();
     test_json_file();
     test_encode_decode();
