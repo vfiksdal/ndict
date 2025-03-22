@@ -24,19 +24,19 @@ class njson_exception: public std::exception {
  */
 class njson {
     private:
-        std::string trim(std::string buffer);
-        std::string parsequoted(std::string buffer,const int &pos=0);
-        std::string parseunquoted(std::string buffer,const int &pos=0);
-        std::string parseblock(std::string buffer,const int &pos=0);
-        void parsearray(ndict &object,std::string buffer);
-        void parseobject(ndict &object,std::string buffer);
-        void parsevalue(ndict &object,std::string buffer);
-        ndict::type_t valuetype(std::string buffer);
+        static std::string trim(std::string buffer);
+        static std::string parsequoted(std::string buffer,const int &pos=0);
+        static std::string parseunquoted(std::string buffer,const int &pos=0);
+        static std::string parseblock(std::string buffer,const int &pos=0);
+        static void parsearray(ndict &object,std::string buffer);
+        static void parseobject(ndict &object,std::string buffer);
+        static void parsevalue(ndict &object,std::string buffer);
+        static ndict::type_t valuetype(std::string buffer);
     public:
-        ndict read(const std::string &path);
-        ndict decode(const std::string &json);
-        std::string encode(const ndict &dict);
-        ndict merge(const std::string &json,const ndict &dict);
+        static ndict read(const std::string &path);
+        static ndict decode(const std::string &json);
+        static std::string encode(const ndict &dict);
+        static ndict merge(const std::string &json,const ndict &dict);
 
 };
 

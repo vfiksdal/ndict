@@ -41,8 +41,7 @@ ndict dict;
 dict["mystring"]="Hello World!";
 dict["myint"]=123;
 
-njson parser;
-string text=parser.encode(dict);
+string text=njson::encode(dict);
 printf("%s",text.c_str());
 ```
 
