@@ -9,10 +9,10 @@
 #include <vector>
 
 //! Declares version number. This is not used internally.
-#define NDICT_VERSION           "1.1.1"
+#define NDICT_VERSION           "1.1.2"
 
 //! Declare a maximum array size. Will throw an exception if out of bounds.
-#define NDICT_MAX_ARRAY_SIZE    1024
+#define NDICT_MAX_ARRAY_SIZE    1024*8
 
 //! Throw an exception when accessing non-existing values
 #define NDICT_CHECK_EXISTING    true
@@ -100,9 +100,19 @@ class ndict {
 
         //! Operators to assign vector objects
         template<typename T,typename A> ndict& operator=(std::vector<T,A> const &Vector){
+            // Check bounds
+            if(Vector.size()>NDICT_MAX_ARRAY_SIZE){
+                throw ndict_exception("Array index is out of bound");
+            }
+
+            // Copy array verbatim
             (*this).clear();
+            type=TARRAY;
             for(unsigned i=0;i<Vector.size();i++){
-                (*this)[i]=Vector[i];
+                keys.push_back(std::to_string(i));
+                ndict item;
+                item=Vector[i];
+                items.push_back(item);
             }
             return *this;
         }
