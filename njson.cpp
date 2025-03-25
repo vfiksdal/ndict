@@ -55,7 +55,7 @@ std::string njson::parsequoted(std::string buffer,const int &pos){
             escaped=true;
         }
     }
-    throw njson_exception("String was not unquoted");
+    throw njson_exception("String was not quoted");
 }
 
 /*!\brief Parses an unquoted string

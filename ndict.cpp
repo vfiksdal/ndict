@@ -143,26 +143,11 @@ ndict& ndict::operator[](const unsigned &Index){
 
     // Assert array contents
     type=TARRAY;
-    for(unsigned i=0;i<=Index;i++){
-        bool hit=false;
-        for(unsigned j=0;!hit && j<keys.size();j++){
-            hit|=(keys[j]==std::to_string(i));
-        }
-        if(!hit){
-            keys.push_back(std::to_string(i));
-            items.push_back(ndict());
-        }
+    for(unsigned i=keys.size();i<=Index;i++){
+        keys.push_back(std::to_string(i));
+        items.push_back(ndict());
     }
-
-    // Find item
-    for(unsigned i=0;i<keys.size();i++){
-        if(keys[i]==std::to_string(Index)){
-            return items[i];
-        }
-    }
-
-    // Fallback to satisfy compiler: TODO: Throw
-    throw ndict_exception("Invalid array allocation");
+    return items[Index];
 }
 
 /*!\brief Get size of dictionary object

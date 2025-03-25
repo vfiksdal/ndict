@@ -1,6 +1,7 @@
 /*!\file utest.cpp
  * \brief Unit tests for ndict
  */
+#include <sys/time.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string>
@@ -24,6 +25,16 @@ void test(const std::string &Name,const bool &Result){
     else{
         ufailed++;
     }
+}
+
+/*!\brief Simplisting clockstamp for performancetesting
+ * \return Time in seconds with usecond precision
+ */
+double getclock(){
+    struct timeval tv;
+    struct timezone tz;
+    gettimeofday(&tv, &tz);
+    return 1e-6*tv.tv_usec+tv.tv_sec;
 }
 
 /*!\brief Test basic dictionary handling
@@ -144,8 +155,7 @@ void test_json_string(){
         "}\n";
 
     // Parse string to a dictionary object and test
-    njson json;
-    ndict object=json.decode(text);
+    ndict object=njson::decode(text);
     //printf("in :%s\n",text.c_str());
     //printf("out:%s\n",object.getjson().c_str());
     test("Parsed N root items",object.size()==9);
@@ -220,8 +230,7 @@ void test_json_file(){
 #endif
 
     // Parse read-back json to a dict and test
-    njson json;
-    ndict object=json.read(tmpname);
+    ndict object=njson::read(tmpname);
     unlink(tmpname.c_str());
     test("Parsed N root items",object.size()==9);
     test("Parsed bool item",object["bool"].getbool()==true);
@@ -302,9 +311,8 @@ void test_encode_decode(){
     test("Original nested sub object has null-object",object["outer"]["inner"].size()==4);
 
     // Parse to json, read back, and test new object
-    njson json;
-    std::string text=json.encode(object);
-    object=json.decode(text);
+    std::string text=njson::encode(object);
+    object=njson::decode(text);
     test("Reencoded has N root items",object.size()==5);
     test("Reencoded string value",object["string"].getstring()=="string");
     test("Reencoded int value",object["int"].getint()==123);
@@ -349,10 +357,8 @@ void test_json_merge(){
         "   }\n"
         "}\n";
 
-    njson json;
-    ndict object=json.merge(text,ogobject);
-
     // Test merged dictionary
+    ndict object=njson::merge(text,ogobject);
     test("Merged object has N root items",object.size()==6);
     test("Destination retains unique values",object["string2"].getstring()=="test");
     test("Destination got a copy of unique values",object["string"].getstring()=="string");
@@ -363,7 +369,7 @@ void test_json_merge(){
     test("Destination got a copy of array",object["intarray"].size()==5);
     test("Destination got a copy of array values",object["intarray"][3].getint()==3);
     //printf("og:%s\n",ogobject.getjson().c_str());
-    //printf("src:%s\n",json.decode(text).getjson().c_str());
+    //printf("src:%s\n",njson::decode(text).getjson().c_str());
     //printf("merged:%s\n",object.getjson().c_str());
 }
 
@@ -377,8 +383,8 @@ void test_nested_objects(){
         "{\n"
         "   \"array\" : [{\"a\":\"A\"},{\"b\":\"B\"}]\n"
         "}\n";
-    njson decoder;
-    ndict object=decoder.decode(text);
+
+    ndict object=njson::decode(text);
     test("Root object has 1 items",object.size()==1);
     test("Array object has 2 items",object["array"].size()==2);
     test("Inner object 1 has 1 items",object["array"][0].size()==1);
@@ -392,7 +398,7 @@ void test_nested_objects(){
         "{\n"
         "   \"array\" : [[1,2,3],[4,5,6],[7,8,9]]\n"
         "}\n";
-    object=decoder.decode(text);
+    object=njson::decode(text);
     test("Root object has 1 items",object.size()==1);
     test("Root array has 3 items",object["array"].size()==3);
     test("Array item has 3 items",object["array"][0].size()==3);
@@ -411,7 +417,7 @@ void test_nested_objects(){
         "{\n"
         "   \"array\" : [null,null]\n"
         "}\n";
-    object=decoder.decode(text);
+    object=njson::decode(text);
     test("Root object has 1 items",object.size()==1);
     test("Root array has 2 items",object["array"].size()==2);
     test("Array contents is as expected",object["array"][0].type==ndict::TNULL);
@@ -464,7 +470,6 @@ void test_error(){
 #endif
 
     // Test encoding with trailing comma
-    njson json;
     {
         std::string text=""
             "{\n"
@@ -474,7 +479,7 @@ void test_error(){
             "   \"float\" : 123.456000,\n"
             "   \"intarray\" : [0,1,2,3,4],\n"
             "}\n";
-        object=json.decode(text);
+        object=njson::decode(text);
         test("Can decode json with trailing comma",object.size()==5);
     }
 
@@ -490,7 +495,7 @@ void test_error(){
             "   \"intarray\" : [0,1,2,3,4],\n"
             "}xx\n";
         try{
-            object=json.decode(text);
+            object=njson::decode(text);
         }
         catch(njson_exception &e){
             result=true;
@@ -506,7 +511,7 @@ void test_error(){
             "   \"bool\" : rue,\n"
             "}\n";
         try{
-            object=json.decode(text);
+            object=njson::decode(text);
             printf("%s\n",object.getjson().c_str());
         }
         catch(njson_exception &e){
@@ -525,7 +530,7 @@ void test_error(){
             "   \"intarray\" : [0,1,2,3,4],\n"
             "}\n";
         try{
-            object=json.decode(text);
+            object=njson::decode(text);
         }
         catch(njson_exception &e){
             result=true;
@@ -536,7 +541,6 @@ void test_error(){
 
 void test_special(){
     printf("\nTesting special cases:\n");
-
     ndict object;
     object["string"]="string";
     object["int"]=123;
@@ -556,6 +560,58 @@ void test_special(){
     test("Size of unknown object",object["blabla"].size()==0);
     test("Size of array object",object["array"].size()==3);
 
+    // Test with quoted values
+    std::string quotedkey="{\"k\\\"e\\\"y\":\"value\"}";
+    std::string quotedvalue="{\"key\":\"val\\\"u\\\"e\"}";
+    object=njson::decode(quotedkey);
+    test("json with quoted key has right size",object.size()==1);
+    test("json with quoted key has quoted key",object.haskey("k\\\"e\\\"y"));
+    test("json with quoted key responds equal operator",object["k\\\"e\\\"y"]=="value");
+    object=njson::decode(quotedvalue);
+    test("json with quoted value has right size",object.size()==1);
+    test("json with quoted value has key",object.haskey("key"));
+    test("json with quoted value has quoted value",object["key"].getstring()=="val\\\"u\\\"e");
+    test("json with quoted value reponds to equal operator",object["key"]=="val\\\"u\\\"e");
+}
+
+void test_perf(){
+    double start,stop;
+    ndict object;
+    std::string text=""
+        "{\n"
+        "   \"bool\" : true,\n"
+        "   \"string\" : \"string\",\n"
+        "   \"int\" : 123,\n"
+        "   \"float\" : 123.456000,\n"
+        "   \"intarray\" : [0,1,2,3,4,5,6,7,8,9],\n"
+        "}\n";
+
+    printf("\nRunning performance tests\n");
+    start=getclock();
+    object=njson::decode(text);
+    for(unsigned i=0;i<1000;i++){
+        std::string text=njson::encode(object);
+        object=njson::decode(text);
+    }
+    stop=getclock();
+    printf("    Encoded and decoded short json 1000 times in %.3f ms\n",(stop-start)*1000);
+
+    start=getclock();
+    object=njson::decode(text);
+    for(unsigned i=0;i<1000;i++){
+        object["longarray"][i]=i;
+    }
+    stop=getclock();
+    printf("    Added 1000 array values in %.3f ms\n",(stop-start)*1000);
+
+    start=getclock();
+    object=njson::decode(text);
+    for(unsigned i=0;i<1000;i++){
+        std::string text=njson::encode(object);
+        object=njson::decode(text);
+    }
+    stop=getclock();
+    printf("    Encoded and decoded long json 1000 times in %.3f ms\n",(stop-start)*1000);
 }
 
 /*!\brief Run baby! RUN!
@@ -574,6 +630,7 @@ int main(){
     test_json_merge();
     test_nested_objects();
     test_error();
+    test_perf();
     printf("\nPassed %d/%d tests\n",upassed,upassed+ufailed);
     if(ufailed==0){
         printf("All clear!\n");

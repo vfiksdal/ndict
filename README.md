@@ -26,7 +26,6 @@ This will produce the following output:
 ```
 hello world!
 123
-123
 ```
 
 ## The njson class
