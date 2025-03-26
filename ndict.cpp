@@ -32,25 +32,25 @@ bool ndict::operator==(const bool &Value) {try{return getbool()==Value;}catch(..
  * \param Value Value to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const double &Value) {char *e; return strtod(value.c_str(),&e)==Value && e==0;}
+bool ndict::operator==(const double &Value) {char *e; return strtod(value.c_str(),&e)==Value && *e==0;}
 
 /*!\brief Comparison operator for integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const int &Value) {char *e; return strtol(value.c_str(),&e,10)==Value && e==0;}
+bool ndict::operator==(const int &Value) {char *e; return strtol(value.c_str(),&e,10)==Value && *e==0;}
 
 /*!\brief Comparison operator for long integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const long &Value) {char *e; return strtol(value.c_str(),&e,10)==Value && e==0;}
+bool ndict::operator==(const long &Value) {char *e; return strtol(value.c_str(),&e,10)==Value && *e==0;}
 
 /*!\brief Comparison operator for long long integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const long long &Value) {char *e; return strtoll(value.c_str(),&e,10)==Value && e==0;}
+bool ndict::operator==(const long long &Value) {char *e; return strtoll(value.c_str(),&e,10)==Value && *e==0;}
 
 /*!\brief Assignemnt operator for boolean values
  * \param Value Value to assign to dictionary object
@@ -219,33 +219,39 @@ int ndict::getint() const{
 #if NDICT_CHECK_TYPE
     if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
 #endif
-    return atoi(value.c_str());
+    char *e=0;
+    int v=strtol(value.c_str(),&e,10);
+    return *e==0?v:0;
 }
 
 /*!\brief Get dictionary value as a long integer
  * \return Integer representation of value (0 on failure)
  */
-int ndict::getlong() const{
+long ndict::getlong() const{
 #if NDICT_CHECK_EXISTING
     if(type==TNULL) throw ndict_exception("Value is not set!");
 #endif
 #if NDICT_CHECK_TYPE
     if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
 #endif
-    return atol(value.c_str());
+    char *e=0;
+    long v=strtol(value.c_str(),&e,10);
+    return *e==0?v:0;
 }
 
 /*!\brief Get dictionary value as a long long integer
  * \return Integer representation of value (0 on failure)
  */
-int ndict::getlonglong() const{
+long long ndict::getlonglong() const{
 #if NDICT_CHECK_EXISTING
     if(type==TNULL) throw ndict_exception("Value is not set!");
 #endif
 #if NDICT_CHECK_TYPE
     if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
 #endif
-    return atoll(value.c_str());
+    char *e=0;
+    long long v=strtoll(value.c_str(),&e,10);
+    return *e==0?v:0;
 }
 
 /*!\brief Get dictionary value as a float
@@ -258,7 +264,9 @@ double ndict::getdouble() const{
 #if NDICT_CHECK_TYPE
     if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
 #endif
-    return atof(value.c_str());
+    char *e=0;
+    double v=strtod(value.c_str(),&e);
+    return *e==0?v:0;
 }
 
 /*!\brief Get dictionary value as a boolean

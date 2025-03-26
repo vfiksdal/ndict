@@ -46,7 +46,7 @@ void test_dict(){
     test("Empty dictionary has 0 root items",object.size()==0);
     object["string"]="string";
     object["int"]=123;
-    object["float"]=123.456;
+    object["double"]=123.456;
     object["negative"]=-123456;
     object["object"]["value1"]="value1";
     object["object"]["value2"]="value2";
@@ -60,7 +60,7 @@ void test_dict(){
     test("Dictionary string value",object["string"].getstring()=="string");
     test("Dictionary char value",object["string"].getchar()==std::string("string"));
     test("Dictionary int value",object["int"].getint()==123);
-    test("Dictionary float value",object["float"].getdouble()==123.456);
+    test("Dictionary double value",object["double"].getdouble()==123.456);
     test("Dictionary negative value",object["negative"].getint()==-123456);
     test("Dictionary object has N items",object["object"].size()==3);
     test("Dictionary object first string value",object["object"]["value1"].getstring()=="value1");
@@ -78,7 +78,7 @@ void test_dict(){
     test("Dictionary copy string value",copy["string"].getstring()=="string");
     test("Dictionary copy char value",copy["string"].getchar()==std::string("string"));
     test("Dictionary copy int value",copy["int"].getint()==123);
-    test("Dictionary copy float value",copy["float"].getdouble()==123.456);
+    test("Dictionary copy double value",copy["double"].getdouble()==123.456);
     test("Dictionary copy object has N items",copy["object"].size()==3);
     test("Dictionary copy object first string value",copy["object"]["value1"].getstring()=="value1");
     test("Dictionary copy object second string value",copy["object"]["value2"].getstring()=="value2");
@@ -142,7 +142,7 @@ void test_json_string(){
         "   \"sstring\" : \"st ring\",\n"
         "   \"qstring\" : \"st\\\"ring\",\n"
         "   \"int\" : 123,\n"
-        "   \"float\" : 123.456000,\n"
+        "   \"double\" : 123.456000,\n"
         "   \"intarray\" : [0,1,2,3,4],\n"
         "   \"strarray\" : [\"a\",\"b\",\"c\"],\n"
         "   \"outer\" : {\n"
@@ -164,7 +164,7 @@ void test_json_string(){
     test("Parsed string item with space",object["sstring"].getstring()=="st ring");
     test("Parsed string item with escape",object["qstring"].getstring()=="st\\\"ring");
     test("Parsed integer item",object["int"].getint()==123);
-    test("Parsed float item",object["float"].getdouble()==123.456);
+    test("Parsed double item",object["double"].getdouble()==123.456);
     test("Parsed integer array of N items",object["intarray"].size()==5);
     test("Parsed integer array first value",object["intarray"][0].getint()==0);
     test("Parsed integer array second value",object["intarray"][1].getint()==1);
@@ -194,7 +194,7 @@ void test_json_file(){
         "   \"sstring\" : \"st ring\",\n"
         "   \"qstring\" : \"st\\\"ring\",\n"
         "   \"int\" : 123,\n"
-        "   \"float\" : 123.456000,\n"
+        "   \"double\" : 123.456000,\n"
         "   \"intarray\" : [0,1,2,3,4],\n"
         "   \"strarray\" : [\"a\",\"b\",\"c\"],\n"
         "   \"outer\" : {\n"
@@ -238,7 +238,7 @@ void test_json_file(){
     test("Parsed string item with space",object["sstring"].getstring()=="st ring");
     test("Parsed string item with escape",object["qstring"].getstring()=="st\\\"ring");
     test("Parsed integer item",object["int"].getint()==123);
-    test("Parsed float item",object["float"].getdouble()==123.456);
+    test("Parsed double item",object["double"].getdouble()==123.456);
     test("Parsed integer array of N items",object["intarray"].size()==5);
     test("Parsed integer array first value",object["intarray"][0].getint()==0);
     test("Parsed integer array second value",object["intarray"][1].getint()==1);
@@ -263,7 +263,9 @@ void test_compare(){
     object["string"]="string";
     object["stringint"]="123";
     object["int"]=123;
-    object["float"]=123.456;
+    object["long"]=123;
+    object["longlong"]=123;
+    object["double"]=123.456;
     object["true"]=true;
     object["false"]=false;
 
@@ -275,6 +277,14 @@ void test_compare(){
     test("Comparing boolean object to matching value",object["true"]==true);
     test("Comparing boolean object to mismatching value",object["false"]!=true);
     test("Comparing boolean object to string",object["false"]!="true");
+    test("Comparing integer object to matching integer",object["int"]==123);
+    test("Comparing integer object to mismatching integer",object["int"]!=1234);
+    test("Comparing long object to matching long",object["long"]==123L);
+    test("Comparing long object to mismatching long",object["long"]!=1234L);
+    test("Comparing long long object to matching long long",object["longlong"]==123LL);
+    test("Comparing long long object to mismatching long long",object["longlong"]!=1234LL);
+    test("Comparing double object to matching double",object["double"]==123.456);
+    test("Comparing double object to mismatching double",object["double"]!=123.4567);
 }
 
 /*!\brief Test dictionary-json-dictionary encoding/decoding
@@ -285,7 +295,7 @@ void test_encode_decode(){
     ndict object;
     object["string"]="string";
     object["int"]=123;
-    object["float"]=123.456;
+    object["double"]=123.456;
     object["object"]["value1"]="value1";
     object["object"]["value2"]="value2";
     object["object"]["value3"]="value3";
@@ -298,7 +308,7 @@ void test_encode_decode(){
     test("Original has N root items",object.size()==5);
     test("Original string value",object["string"].getstring()=="string");
     test("Original int value",object["int"].getint()==123);
-    test("Original float value",object["float"].getdouble()==123.456);
+    test("Original double value",object["double"].getdouble()==123.456);
     test("Original object has N items",object["object"].size()==3);
     test("Original object first string value",object["object"]["value1"].getstring()=="value1");
     test("Original object second string value",object["object"]["value2"].getstring()=="value2");
@@ -316,7 +326,7 @@ void test_encode_decode(){
     test("Reencoded has N root items",object.size()==5);
     test("Reencoded string value",object["string"].getstring()=="string");
     test("Reencoded int value",object["int"].getint()==123);
-    test("Reencoded float value",object["float"].getdouble()==123.456);
+    test("Reencoded double value",object["double"].getdouble()==123.456);
     test("Reencoded object has N items",object["object"].size()==3);
     test("Reencoded object first string value",object["object"]["value1"].getstring()=="value1");
     test("Reencoded object second string value",object["object"]["value2"].getstring()=="value2");
@@ -345,7 +355,7 @@ void test_json_merge(){
         "{\n"
         "   \"bool\" : true,\n"
         "   \"string\" : \"string\",\n"
-        "   \"float\" : 123.456000,\n"
+        "   \"double\" : 123.456000,\n"
         "   \"intarray\" : [0,1,2,3,4],\n"
         "   \"outer\" : {\n"
         "       \"inner\" : {\n"
@@ -432,12 +442,12 @@ void test_error(){
     ndict object;
     object["string"]="string";
     object["int"]=123;
-    object["float"]=123.456;
+    object["double"]=123.456;
 
     // Test dictionary
 #if !NDICT_CHECK_TYPE
     test("Dictionary string value resolves to 0 as int",object["string"].getint()==0);
-    test("Dictionary string value resolves to 0 as float",object["string"].getdouble()==0);
+    test("Dictionary string value resolves to 0 as double",object["string"].getdouble()==0);
     test("Dictionary string value resolves to false as bool",object["string"].getbool()==false);
 #else
     {
@@ -454,7 +464,7 @@ void test_error(){
 #if !NDICT_CHECK_EXISTING
     test("Invalid dictionary value resolves to empty string",object["invalid"].getstring()=="");
     test("Invalid dictionary value resolves to 0 as int",object["invalid"].getint()==0);
-    test("Invalid dictionary value resolves to 0 as float",object["invalid"].getdouble()==0);
+    test("Invalid dictionary value resolves to 0 as double",object["invalid"].getdouble()==0);
     test("Invalid dictionary value resolves to false as bool",object["invalid"].getbool()==0);
 #else
     {
@@ -476,7 +486,7 @@ void test_error(){
             "   \"bool\" : true,\n"
             "   \"string\" : \"string\",\n"
             "   \"int\" : 123,\n"
-            "   \"float\" : 123.456000,\n"
+            "   \"double\" : 123.456000,\n"
             "   \"intarray\" : [0,1,2,3,4],\n"
             "}\n";
         object=njson::decode(text);
@@ -491,7 +501,7 @@ void test_error(){
             "   \"bool\" : true,\n"
             "   \"string\" : \"string\",\n"
             "   \"int\" : 123,\n"
-            "   \"float\" : 123.456000,\n"
+            "   \"double\" : 123.456000,\n"
             "   \"intarray\" : [0,1,2,3,4],\n"
             "}xx\n";
         try{
@@ -526,7 +536,7 @@ void test_error(){
         std::string text=""
             "{\n"
             "   \"bool\" : true,\n"
-            "   \"float\" : 123,456000,\n"
+            "   \"double\" : 123,456000,\n"
             "   \"intarray\" : [0,1,2,3,4],\n"
             "}\n";
         try{
@@ -544,7 +554,7 @@ void test_special(){
     ndict object;
     object["string"]="string";
     object["int"]=123;
-    object["float"]=123.456;
+    object["double"]=123.456;
     object["true"]=true;
     object["false"]=false;
     object["array"][0]=1;
@@ -553,7 +563,7 @@ void test_special(){
 
     // Test original dictionary
     test("Size of string object",object["string"].size()==0);
-    test("Size of double object",object["float"].size()==0);
+    test("Size of double object",object["double"].size()==0);
     test("Size of int object",object["int"].size()==0);
     test("Size of boolean object",object["true"].size()==0);
     test("Size of boolean object",object["false"].size()==0);
@@ -578,7 +588,6 @@ void test_special(){
     object=njson::decode("{\"array\":[ \n \t ]}");
     test("json with whitespace array decodes",object.size()==1);
     test("json with whitespace array is empty",object["array"].size()==0);
-
 }
 
 void test_perf(){
@@ -589,7 +598,7 @@ void test_perf(){
         "   \"bool\" : true,\n"
         "   \"string\" : \"string\",\n"
         "   \"int\" : 123,\n"
-        "   \"float\" : 123.456000,\n"
+        "   \"double\" : 123.456000,\n"
         "   \"intarray\" : [0,1,2,3,4,5,6,7,8,9],\n"
         "}\n";
 

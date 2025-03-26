@@ -56,8 +56,8 @@ class ndict {
         double getdouble() const;
         bool getbool() const;
         int getint() const;
-        int getlong() const;
-        int getlonglong() const;
+        long getlong() const;
+        long long getlonglong() const;
 
         // Array and object accessors
         unsigned size() const;
