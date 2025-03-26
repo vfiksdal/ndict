@@ -561,17 +561,24 @@ void test_special(){
     test("Size of array object",object["array"].size()==3);
 
     // Test with quoted values
-    std::string quotedkey="{\"k\\\"e\\\"y\":\"value\"}";
-    std::string quotedvalue="{\"key\":\"val\\\"u\\\"e\"}";
-    object=njson::decode(quotedkey);
+    object=njson::decode("{\"k\\\"e\\\"y\":\"value\"}");
     test("json with quoted key has right size",object.size()==1);
     test("json with quoted key has quoted key",object.haskey("k\\\"e\\\"y"));
     test("json with quoted key responds equal operator",object["k\\\"e\\\"y"]=="value");
-    object=njson::decode(quotedvalue);
+    object=njson::decode("{\"key\":\"val\\\"u\\\"e\"}");
     test("json with quoted value has right size",object.size()==1);
     test("json with quoted value has key",object.haskey("key"));
     test("json with quoted value has quoted value",object["key"].getstring()=="val\\\"u\\\"e");
     test("json with quoted value reponds to equal operator",object["key"]=="val\\\"u\\\"e");
+
+    // Test with empty array
+    object=njson::decode("{\"array\":[]}");
+    test("json with empty array decodes",object.size()==1);
+    test("json with empty array is empty",object["array"].size()==0);
+    object=njson::decode("{\"array\":[ \n \t ]}");
+    test("json with whitespace array decodes",object.size()==1);
+    test("json with whitespace array is empty",object["array"].size()==0);
+
 }
 
 void test_perf(){

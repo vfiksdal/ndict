@@ -171,7 +171,9 @@ void njson::parsearray(ndict &object,std::string buffer){
             value+=buffer[i];
         }
     }
-    array.push_back(value);
+    if(value.size()){
+        array.push_back(value);
+    }
     for(unsigned i=0;i<array.size();i++){
         parsevalue(object[i],array[i]);
     }
