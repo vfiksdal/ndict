@@ -88,6 +88,17 @@ void test_dict(){
     test("Dictionary copy nested sub object first value",copy["outer"]["inner"]["value1"].getstring()=="value1");
     test("Dictionary copy nested sub object second value",copy["outer"]["inner"]["value2"].getstring()=="value2");
     test("Dictionary copy nested sub object third value",copy["outer"]["inner"]["value3"].getstring()=="value3");
+
+    // Test removing of keys
+    object["object"].remove("value2");
+    test("Removing middle item contracts the object",object["object"].size()==2);
+    test("Preceeding value is intact",object["object"]["value1"].getstring()=="value1");
+    test("Next value is intact",object["object"]["value3"].getstring()=="value3");
+    object["object"].remove("value3");
+    test("Removing end item contracts the object",object["object"].size()==1);
+    test("Preceeding value is intact",object["object"]["value1"].getstring()=="value1");
+    object["object"].remove("value1");
+    test("Removing last item leaves an empty object",object["object"].size()==0);
 }
 
 /*!\brief Test basic array handling
@@ -128,6 +139,24 @@ void test_array(){
     test("Checking third integer value",object["intarray"][2].getint()==2);
     test("Checking fourth integer value",object["intarray"][3].getint()==3);
     test("Checking fifth integer value",object["intarray"][4].getint()==4);
+
+    // Try to remove items
+    object["intarray"].remove(2);
+    test("Removing middle item contracts the array",object["intarray"].size()==4);
+    test("Preceeding value is intact",object["intarray"][1].getint()==1);
+    test("Next value is relocated",object["intarray"][2].getint()==3);
+    object["intarray"].remove(0);
+    test("Removing first item contracts the array",object["intarray"].size()==3);
+    test("First value is now the second",object["intarray"][0].getint()==1);
+    object["intarray"].remove(3);
+    test("Removing out-of-bound item is ignored",object["intarray"].size()==3);
+    object["intarray"].remove(2);
+    test("Removing last item contracts the array",object["intarray"].size()==2);
+    object["intarray"].remove(0);
+    object["intarray"].remove(0);
+    test("Removing all items leaves an empty array",object["intarray"].size()==0);
+    object["intarray"].remove(0);
+    test("Removing items from empty array does nothing",object["intarray"].size()==0);
 }
 
 /*!\brief Test json-dictionary parsing

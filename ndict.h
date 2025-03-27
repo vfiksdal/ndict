@@ -60,6 +60,8 @@ class ndict {
         long long getlonglong() const;
 
         // Array and object accessors
+        void remove(const std::string &key);
+        void remove(const unsigned &index);
         unsigned size() const;
         void clear();
 

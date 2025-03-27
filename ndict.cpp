@@ -125,6 +125,32 @@ ndict& ndict::operator[](const std::string &Key){
     return items.back();
 }
 
+/*!\brief Removes a named item from object
+ * \param key Name of item to remove
+ */
+void ndict::remove(const std::string &key){
+    for(unsigned i=0;type==TOBJECT && i<keys.size();i++){
+        if(keys[i]==key){
+            keys.erase(keys.begin()+i);
+            items.erase(items.begin()+i);
+            return;
+        }
+    }
+}
+
+/*!\brief Removes indexed item from array
+ * \param index Index of item to remove
+ */
+void ndict::remove(const unsigned &index){
+    if(type==TARRAY && index<keys.size()){
+        keys.erase(keys.begin()+index);
+        items.erase(items.begin()+index);
+        for(unsigned i=0;i<keys.size();i++){
+            keys[i]=std::to_string(i);
+        }
+    }
+}
+
 /*!\brief Subscript operator for indexed dictionary values
  * \param Index Numerical index to return object for
  * \return Reference to indexed dictionary object
