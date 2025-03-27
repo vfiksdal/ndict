@@ -1,7 +1,7 @@
 # nDICT
-nDICT is a lightweight dictionary object which emulates the python dict type. It's designed as two drop-in classes
-that you can compile directly into your projects. The dictionary is implemented as a standalone class, whereas the
-JSON parser is a supplementary class to save/load dictionary object to disk for persistent storage.
+nDICT is a simply drop-in class which emulates the python dict type. The dictionary class can work as
+a standalone object, but you can optionally add the supplementary njson class to get json decoding
+capabilities allowing you to save/load dictionary objects to disk for persistent storage.
 
 # Usage
 ## The ndict class

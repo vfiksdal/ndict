@@ -52,6 +52,24 @@ bool ndict::operator==(const long &Value) {char *e; return strtol(value.c_str(),
  */
 bool ndict::operator==(const long long &Value) {char *e; return strtoll(value.c_str(),&e,10)==Value && *e==0;}
 
+/*!\brief Comparison operator for unsigned integer
+ * \param Value Integer to compare to
+ * \return True if values are identical
+ */
+bool ndict::operator==(const unsigned int &Value) {char *e; return strtoul(value.c_str(),&e,10)==Value && *e==0;}
+
+/*!\brief Comparison operator for unsigned long integer
+ * \param Value Integer to compare to
+ * \return True if values are identical
+ */
+bool ndict::operator==(const unsigned long &Value) {char *e; return strtoul(value.c_str(),&e,10)==Value && *e==0;}
+
+/*!\brief Comparison operator for unsigned long long integer
+ * \param Value Integer to compare to
+ * \return True if values are identical
+ */
+bool ndict::operator==(const unsigned long long &Value) {char *e; return strtoull(value.c_str(),&e,10)==Value && *e==0;}
+
 /*!\brief Assignemnt operator for boolean values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
@@ -93,6 +111,18 @@ ndict& ndict::operator=(const int &Value) SET(TNUMBER,std::to_string(Value))
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const unsigned int &Value) SET(TNUMBER,std::to_string(Value))
+
+/*!\brief Assignemnt operator for unsigned long values
+ * \param Value Value to assign to dictionary object
+ * \return Reference to assigned dictionary object
+ */
+ndict& ndict::operator=(const unsigned long &Value) SET(TNUMBER,std::to_string(Value))
+
+/*!\brief Assignemnt operator for unsigned long long values
+ * \param Value Value to assign to dictionary object
+ * \return Reference to assigned dictionary object
+ */
+ndict& ndict::operator=(const unsigned long long &Value) SET(TNUMBER,std::to_string(Value))
 
 /*!\brief Assignemnt operator for double values
  * \param Value Value to assign to dictionary object
@@ -277,6 +307,51 @@ long long ndict::getlonglong() const{
 #endif
     char *e=0;
     long long v=strtoll(value.c_str(),&e,10);
+    return *e==0?v:0;
+}
+
+/*!\brief Get dictionary value as an unsigned integer
+ * \return Integer representation of value (0 on failure)
+ */
+unsigned int ndict::getuint() const{
+#if NDICT_CHECK_EXISTING
+    if(type==TNULL) throw ndict_exception("Value is not set!");
+#endif
+#if NDICT_CHECK_TYPE
+    if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
+#endif
+    char *e=0;
+    unsigned int v=strtoul(value.c_str(),&e,10);
+    return *e==0?v:0;
+}
+
+/*!\brief Get dictionary value as an unsigned long integer
+ * \return Integer representation of value (0 on failure)
+ */
+unsigned long ndict::getulong() const{
+#if NDICT_CHECK_EXISTING
+    if(type==TNULL) throw ndict_exception("Value is not set!");
+#endif
+#if NDICT_CHECK_TYPE
+    if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
+#endif
+    char *e=0;
+    unsigned long v=strtoul(value.c_str(),&e,10);
+    return *e==0?v:0;
+}
+
+/*!\brief Get dictionary value as an unsigned long long integer
+ * \return Integer representation of value (0 on failure)
+ */
+unsigned long long ndict::getulonglong() const{
+#if NDICT_CHECK_EXISTING
+    if(type==TNULL) throw ndict_exception("Value is not set!");
+#endif
+#if NDICT_CHECK_TYPE
+    if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
+#endif
+    char *e=0;
+    unsigned long long v=strtoull(value.c_str(),&e,10);
     return *e==0?v:0;
 }
 

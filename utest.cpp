@@ -159,6 +159,40 @@ void test_array(){
     test("Removing items from empty array does nothing",object["intarray"].size()==0);
 }
 
+void test_types(){
+    // Stage a dictionary object
+    printf("\nRunning data type test:\n");
+    ndict object;
+    object["string"]="string";
+    object["int"]=123;
+    object["long"]=123L;
+    object["longlong"]=123LL;
+    object["nint"]=-123;
+    object["nlong"]=-123L;
+    object["nlonglong"]=-123LL;
+    object["uint"]=123U;
+    object["ulong"]=123UL;
+    object["ulonglong"]=123ULL;
+    test("Get int",object["int"].getint()==123);
+    test("Get long",object["long"].getlong()==123L);
+    test("Get long long",object["longlong"].getlonglong()==123LL);
+    test("Get negative int",object["nint"].getint()==-123);
+    test("Get negative long",object["nlong"].getlong()==-123L);
+    test("Get negative long long",object["nlonglong"].getlonglong()==-123LL);
+    test("Get unsigned int",object["uint"].getuint()==123U);
+    test("Get unsigned long",object["ulong"].getulong()==123UL);
+    test("Get unsigned long long",object["ulonglong"].getulonglong()==123ULL);
+    test("Compare int",object["int"]==123);
+    test("Compare long",object["long"]==123L);
+    test("Compare long long",object["longlong"]==123LL);
+    test("Compare negative int",object["nint"]==-123);
+    test("Compare negative long",object["nlong"]==-123L);
+    test("Compare negative long long",object["nlonglong"]==-123LL);
+    test("Compare unsigned int",object["uint"]==123U);
+    test("Compare unsigned long",object["ulong"]==123UL);
+    test("Compare unsigned long long",object["ulonglong"]==123ULL);
+}
+
 /*!\brief Test json-dictionary parsing
  */
 void test_json_string(){
@@ -667,6 +701,7 @@ int main(){
     printf("Vegard Fiksdal (C) 2024\n");
     test_dict();
     test_array();
+    test_types();
     test_compare();
     test_special();
     test_json_string();

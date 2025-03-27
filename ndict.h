@@ -58,6 +58,9 @@ class ndict {
         int getint() const;
         long getlong() const;
         long long getlonglong() const;
+        unsigned int getuint() const;
+        unsigned long getulong() const;
+        unsigned long long getulonglong() const;
 
         // Array and object accessors
         void remove(const std::string &key);
@@ -83,10 +86,12 @@ class ndict {
         ndict& operator=(const std::string &Value);
         ndict& operator=(const char *Value);
         ndict& operator=(const bool &Value);
+        ndict& operator=(const int &Value);
         ndict& operator=(const long &Value);
         ndict& operator=(const long long &Value);
-        ndict& operator=(const int &Value);
         ndict& operator=(const unsigned int &Value);
+        ndict& operator=(const unsigned long &Value);
+        ndict& operator=(const unsigned long long &Value);
         ndict& operator=(const double &Value);
 
         // Comparison operators
@@ -95,9 +100,12 @@ class ndict {
         bool operator==(const std::string &Value);
         bool operator==(const char *Value);
         bool operator==(const bool &Value);
+        bool operator==(const int &Value);
         bool operator==(const long &Value);
         bool operator==(const long long &Value);
-        bool operator==(const int &Value);
+        bool operator==(const unsigned int &Value);
+        bool operator==(const unsigned long &Value);
+        bool operator==(const unsigned long long &Value);
         bool operator==(const double &Value);
 
         //! Operators to assign vector objects
