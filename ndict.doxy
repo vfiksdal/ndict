@@ -177,8 +177,8 @@ FILE_PATTERNS          = *.c \
                          *.ucf \
                          *.qsf \
                          *.ice
-RECURSIVE              = NO
-EXCLUDE                =
+RECURSIVE              = YES
+EXCLUDE                = example_dict.cpp example_json.cpp utest.cpp
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       =
 EXCLUDE_SYMBOLS        =
@@ -365,7 +365,7 @@ EXTERNAL_PAGES         = YES
 #---------------------------------------------------------------------------
 # Configuration options related to diagram generator tools
 #---------------------------------------------------------------------------
-HIDE_UNDOC_RELATIONS   = YES
+HIDE_UNDOC_RELATIONS   = NO
 HAVE_DOT               = YES
 DOT_NUM_THREADS        = 0
 DOT_COMMON_ATTR        = "fontname=Helvetica,fontsize=10"

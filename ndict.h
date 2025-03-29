@@ -9,10 +9,10 @@
 #include <vector>
 
 //! Declares version number. This is not used internally.
-#define NDICT_VERSION           "1.1.2"
+#define NDICT_VERSION           "1.2.0"
 
 //! Declare a maximum array size. Will throw an exception if out of bounds.
-#define NDICT_MAX_ARRAY_SIZE    1024*8
+#define NDICT_MAX_ARRAY_SIZE    1024*4
 
 //! Throw an exception when accessing non-existing values
 #define NDICT_CHECK_EXISTING    true
@@ -40,7 +40,7 @@ class ndict {
         std::vector<ndict> items;
         std::string value;
     public:
-        //! Enumerate JSON types
+        //! Enumerate object types
         enum type_t{
             TNUMBER,    //!< Value is a number
             TSTRING,    //!< Value is a string
@@ -48,7 +48,7 @@ class ndict {
             TARRAY,     //!< Value is an array
             TOBJECT,    //!< Value is an object
             TNULL       //!< Value is not valid
-        } type=TNULL;
+        } type=TNULL;   //!< Type of object
 
         // Value accessors
         std::string getstring() const;

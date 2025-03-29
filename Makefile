@@ -14,8 +14,10 @@ dist: clean
 	tar czvf ndict.tar.gz --transform "s+^+ndict/+" \
 	    LICENSE README.md example_json.cpp ndict.doxy njson.cpp utest.cpp \
 	    Makefile example_dict.cpp ndict.cpp ndict.h njson.h
+
 doxygen:
 	doxygen ndict.doxy
+	ln -sf doxy/html/index.html
 
 clean:
 	rm -rf utest example_dict example_json doxy/ ndict.tar.gz
