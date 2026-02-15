@@ -88,6 +88,9 @@ void test_dict(){
     test("Dictionary copy nested sub object first value",copy["outer"]["inner"]["value1"].getstring()=="value1");
     test("Dictionary copy nested sub object second value",copy["outer"]["inner"]["value2"].getstring()=="value2");
     test("Dictionary copy nested sub object third value",copy["outer"]["inner"]["value3"].getstring()=="value3");
+    copy["int"]=456;
+    test("Dictionary copy int value was changed",copy["int"].getint()==456);
+    test("Dictionary original retains int value",object["int"].getint()==123);
 
     // Test removing of keys
     object["object"].remove("value2");

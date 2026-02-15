@@ -1,6 +1,6 @@
 # nDICT
-nDICT is a simply drop-in class which emulates the python dict type. The dictionary class can work as
-a standalone object, but you can optionally add the supplementary njson class to get json decoding
+nDICT is a simple drop-in class which emulates the python dict type. The dictionary class can work as
+a standalone object, but you can optionally use the supplementary njson class to get json decoding
 capabilities allowing you to save/load dictionary objects to disk for persistent storage.
 
 # Usage
