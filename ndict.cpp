@@ -38,37 +38,37 @@ bool ndict::operator==(const double &Value) const {char *e; return strtod(value.
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const int &Value) const {char *e; return strtol(value.c_str(),&e,10)==Value && *e==0;}
+bool ndict::operator==(const int &Value) const {char *e; return strtol(value.c_str(),&e,10)==Value && (*e==0||*e=='.');}
 
 /*!\brief Comparison operator for long integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const long &Value) const {char *e; return strtol(value.c_str(),&e,10)==Value && *e==0;}
+bool ndict::operator==(const long &Value) const {char *e; return strtol(value.c_str(),&e,10)==Value && (*e==0||*e=='.');}
 
 /*!\brief Comparison operator for long long integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const long long &Value) const {char *e; return strtoll(value.c_str(),&e,10)==Value && *e==0;}
+bool ndict::operator==(const long long &Value) const {char *e; return strtoll(value.c_str(),&e,10)==Value && (*e==0||*e=='.');}
 
 /*!\brief Comparison operator for unsigned integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const unsigned int &Value) const {char *e; return strtoul(value.c_str(),&e,10)==Value && *e==0;}
+bool ndict::operator==(const unsigned int &Value) const {char *e; return strtoul(value.c_str(),&e,10)==Value && (*e==0||*e=='.');}
 
 /*!\brief Comparison operator for unsigned long integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const unsigned long &Value) const {char *e; return strtoul(value.c_str(),&e,10)==Value && *e==0;}
+bool ndict::operator==(const unsigned long &Value) const {char *e; return strtoul(value.c_str(),&e,10)==Value && (*e==0||*e=='.');}
 
 /*!\brief Comparison operator for unsigned long long integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const unsigned long long &Value) const {char *e; return strtoull(value.c_str(),&e,10)==Value && *e==0;}
+bool ndict::operator==(const unsigned long long &Value) const {char *e; return strtoull(value.c_str(),&e,10)==Value && (*e==0||*e=='.');}
 
 /*!\brief Assignemnt operator for boolean values
  * \param Value Value to assign to dictionary object
@@ -277,7 +277,7 @@ int ndict::getint() const{
 #endif
     char *e=0;
     int v=strtol(value.c_str(),&e,10);
-    return *e==0?v:0;
+    return (*e==0||*e=='.')?v:0;
 }
 
 /*!\brief Get dictionary value as a long integer
@@ -292,7 +292,7 @@ long ndict::getlong() const{
 #endif
     char *e=0;
     long v=strtol(value.c_str(),&e,10);
-    return *e==0?v:0;
+    return (*e==0||*e=='.')?v:0;
 }
 
 /*!\brief Get dictionary value as a long long integer
@@ -307,7 +307,7 @@ long long ndict::getlonglong() const{
 #endif
     char *e=0;
     long long v=strtoll(value.c_str(),&e,10);
-    return *e==0?v:0;
+    return (*e==0||*e=='.')?v:0;
 }
 
 /*!\brief Get dictionary value as an unsigned integer
@@ -322,7 +322,7 @@ unsigned int ndict::getuint() const{
 #endif
     char *e=0;
     unsigned int v=strtoul(value.c_str(),&e,10);
-    return *e==0?v:0;
+    return (*e==0||*e=='.')?v:0;
 }
 
 /*!\brief Get dictionary value as an unsigned long integer
@@ -337,7 +337,7 @@ unsigned long ndict::getulong() const{
 #endif
     char *e=0;
     unsigned long v=strtoul(value.c_str(),&e,10);
-    return *e==0?v:0;
+    return (*e==0||*e=='.')?v:0;
 }
 
 /*!\brief Get dictionary value as an unsigned long long integer
@@ -352,7 +352,7 @@ unsigned long long ndict::getulonglong() const{
 #endif
     char *e=0;
     unsigned long long v=strtoull(value.c_str(),&e,10);
-    return *e==0?v:0;
+    return (*e==0||*e=='.')?v:0;
 }
 
 /*!\brief Get dictionary value as a float
