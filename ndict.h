@@ -95,18 +95,18 @@ class ndict {
         ndict& operator=(const double &Value);
 
         // Comparison operators
-        template<typename T> bool operator!=(const T &Value) {return !(*this==Value);}
-        bool operator==(const ndict &Value);
-        bool operator==(const std::string &Value);
-        bool operator==(const char *Value);
-        bool operator==(const bool &Value);
-        bool operator==(const int &Value);
-        bool operator==(const long &Value);
-        bool operator==(const long long &Value);
-        bool operator==(const unsigned int &Value);
-        bool operator==(const unsigned long &Value);
-        bool operator==(const unsigned long long &Value);
-        bool operator==(const double &Value);
+        template<typename T> bool operator!=(const T &Value) const {return !(*this==Value);}
+        bool operator==(const ndict &Value) const;
+        bool operator==(const std::string &Value) const;
+        bool operator==(const char *Value) const;
+        bool operator==(const bool &Value) const;
+        bool operator==(const int &Value) const;
+        bool operator==(const long &Value) const;
+        bool operator==(const long long &Value) const;
+        bool operator==(const unsigned int &Value) const;
+        bool operator==(const unsigned long &Value) const;
+        bool operator==(const unsigned long long &Value) const;
+        bool operator==(const double &Value) const;
 
         //! Operators to assign vector objects
         template<typename T,typename A> ndict& operator=(std::vector<T,A> const &Vector){

@@ -8,67 +8,67 @@
  * \param Value Dictionary object to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const ndict &Value) {return value==Value.value;}
+bool ndict::operator==(const ndict &Value) const {return value==Value.value;}
 
 /*!\brief Comparison operator for string
  * \param Value String to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const std::string &Value) {return value==Value;}
+bool ndict::operator==(const std::string &Value) const {return value==Value;}
 
 /*!\brief Comparison operator for character string
  * \param Value String to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const char *Value) {return value==Value;}
+bool ndict::operator==(const char *Value) const {return value==Value;}
 
 /*!\brief Comparison operator for boolean
  * \param Value Value to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const bool &Value) {try{return getbool()==Value;}catch(...){return false;}}
+bool ndict::operator==(const bool &Value) const {try{return getbool()==Value;}catch(...){return false;}}
 
 /*!\brief Comparison operator for double
  * \param Value Value to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const double &Value) {char *e; return strtod(value.c_str(),&e)==Value && *e==0;}
+bool ndict::operator==(const double &Value) const {char *e; return strtod(value.c_str(),&e)==Value && *e==0;}
 
 /*!\brief Comparison operator for integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const int &Value) {char *e; return strtol(value.c_str(),&e,10)==Value && *e==0;}
+bool ndict::operator==(const int &Value) const {char *e; return strtol(value.c_str(),&e,10)==Value && *e==0;}
 
 /*!\brief Comparison operator for long integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const long &Value) {char *e; return strtol(value.c_str(),&e,10)==Value && *e==0;}
+bool ndict::operator==(const long &Value) const {char *e; return strtol(value.c_str(),&e,10)==Value && *e==0;}
 
 /*!\brief Comparison operator for long long integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const long long &Value) {char *e; return strtoll(value.c_str(),&e,10)==Value && *e==0;}
+bool ndict::operator==(const long long &Value) const {char *e; return strtoll(value.c_str(),&e,10)==Value && *e==0;}
 
 /*!\brief Comparison operator for unsigned integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const unsigned int &Value) {char *e; return strtoul(value.c_str(),&e,10)==Value && *e==0;}
+bool ndict::operator==(const unsigned int &Value) const {char *e; return strtoul(value.c_str(),&e,10)==Value && *e==0;}
 
 /*!\brief Comparison operator for unsigned long integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const unsigned long &Value) {char *e; return strtoul(value.c_str(),&e,10)==Value && *e==0;}
+bool ndict::operator==(const unsigned long &Value) const {char *e; return strtoul(value.c_str(),&e,10)==Value && *e==0;}
 
 /*!\brief Comparison operator for unsigned long long integer
  * \param Value Integer to compare to
  * \return True if values are identical
  */
-bool ndict::operator==(const unsigned long long &Value) {char *e; return strtoull(value.c_str(),&e,10)==Value && *e==0;}
+bool ndict::operator==(const unsigned long long &Value) const {char *e; return strtoull(value.c_str(),&e,10)==Value && *e==0;}
 
 /*!\brief Assignemnt operator for boolean values
  * \param Value Value to assign to dictionary object
