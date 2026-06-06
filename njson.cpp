@@ -289,6 +289,31 @@ void njson::parseobject(ndict &object,std::string buffer){
     }
 }
 
+/*!\brief Writes a JSON string to a file
+ * \param path Path to JSON file to write
+ * \param json JSON string to write
+ * \return True upon success
+ */
+bool njson::write(const std::string &path,const std::string &json){
+    FILE *fd=fopen(path.c_str(),"w");
+    if(fd){
+        fwrite(json.c_str(),1,json.size(),fd);
+        fclose(fd);
+    }
+    return fd;
+}
+
+/*!\brief Writes a JSON string to a file
+ * \param path Path to JSON file to write
+ * \param json JSON string to write
+ * \return True upon success
+ *
+ * Throws njson_exception upon encoding error
+ */
+bool njson::write(const std::string &path,const ndict &dict){
+    return write(path,encode(dict));
+}
+
 /*!\brief Reads a JSON string from a file and decodes the input to a dictionary object
  * \param path Path to JSON file to read
  * \return ndict object of the decoded file

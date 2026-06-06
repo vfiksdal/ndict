@@ -9,7 +9,7 @@
 #include <vector>
 
 //! Declares version number. This is not used internally.
-#define NDICT_VERSION           "1.2.0"
+#define NDICT_VERSION           "1.2.1"
 
 //! Declare a maximum array size. Will throw an exception if out of bounds.
 #define NDICT_MAX_ARRAY_SIZE    1024*4

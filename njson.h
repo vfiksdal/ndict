@@ -33,6 +33,8 @@ class njson {
         static void parsevalue(ndict &object,std::string buffer);
         static ndict::type_t valuetype(std::string buffer);
     public:
+        static bool write(const std::string &path,const std::string &json);
+        static bool write(const std::string &path,const ndict &dict);
         static ndict read(const std::string &path);
         static ndict decode(const std::string &json);
         static std::string encode(const ndict &dict);
