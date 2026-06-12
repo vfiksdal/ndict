@@ -20,6 +20,8 @@
 //! Enable strict type-checking when accessing values
 #define NDICT_CHECK_TYPE        true
 
+class ndict;
+
 /*!\class ndict_exception
  * \brief Exception class for dictionary handling
  */
@@ -27,8 +29,8 @@ class ndict_exception: public std::exception {
     private:
         std::string msg;
     public:
-        ndict_exception(const std::string &message) : msg(message) {}
-        const char *what(){return msg.c_str();}
+        ndict_exception(const ndict *dict,const std::string &message);
+        const char *what() const noexcept;
 };
 
 /*!\class ndict
@@ -36,6 +38,7 @@ class ndict_exception: public std::exception {
  */
 class ndict {
     private:
+        friend class ndict_exception;
         std::vector<std::string> keys;
         std::vector<ndict> items;
         std::string value;
@@ -49,6 +52,19 @@ class ndict {
             TOBJECT,    //!< Value is an object
             TNULL       //!< Value is not valid
         } type=TNULL;   //!< Type of object
+
+        // Constructors
+        ndict(const std::string &Value);
+        ndict(const char *Value);
+        ndict(const bool &Value);
+        ndict(const int &Value);
+        ndict(const long &Value);
+        ndict(const long long &Value);
+        ndict(const unsigned int &Value);
+        ndict(const unsigned long &Value);
+        ndict(const unsigned long long &Value);
+        ndict(const double &Value);
+        ndict();
 
         // Value accessors
         std::string getstring() const;
@@ -112,7 +128,7 @@ class ndict {
         template<typename T,typename A> ndict& operator=(std::vector<T,A> const &Vector){
             // Check bounds
             if(Vector.size()>NDICT_MAX_ARRAY_SIZE){
-                throw ndict_exception("Array index is out of bound");
+                throw ndict_exception(this,"Array index is out of bound");
             }
 
             // Copy array verbatim

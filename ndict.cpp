@@ -2,7 +2,86 @@
 
 #define QUOTE(STR)      (std::string("\"")+std::string(STR)+std::string("\""))
 #define SET(TYPE,VALUE) {type=TYPE; value=VALUE; return *this;}
+#define CST(TYPE,VALUE) {type=TYPE; value=VALUE;}
 
+/*!\brief Default exception for ndict
+ * \param dict Optional pointer to object that raised the error
+ * \param message Description of the error
+ */
+ndict_exception::ndict_exception(const ndict *dict,const std::string &message){
+    msg=message;
+    if(dict){
+        std::string keys;
+        for(unsigned i=0;i<dict->keys.size();i++){
+            if(keys.size()) keys+=",";
+            keys+=dict->keys[i];
+        }
+        msg+=" (value:'"+dict->value+"'";
+        if(keys.size()) msg+=",children:["+keys+"]";
+        msg+=")";
+    }
+}
+
+/*!\brief Returns the message
+ * \return Error message
+ */
+const char *ndict_exception::what() const noexcept {
+    return msg.c_str();
+}
+
+/*!\brief Constructor for boolean values
+ * \param Value Value to assign to dictionary object
+ */
+ndict::ndict(const bool &Value) CST(TBOOL,Value?"true":"false")
+
+/*!\brief Constructor for boolean values
+ * \param Value Value to assign to dictionary object
+ */
+ndict::ndict(const std::string &Value) CST(TSTRING,Value)
+
+/*!\brief Constructor for boolean values
+ * \param Value Value to assign to dictionary object
+ */
+ndict::ndict(const char *Value) CST(TSTRING,Value)
+
+/*!\brief Constructor for long long integer values
+ * \param Value Value to assign to dictionary object
+ */
+ndict::ndict(const long long &Value) CST(TNUMBER,std::to_string(Value))
+
+/*!\brief Constructor for long integer values
+ * \param Value Value to assign to dictionary object
+ */
+ndict::ndict(const long &Value) CST(TNUMBER,std::to_string(Value))
+
+/*!\brief Constructor for integer values
+ * \param Value Value to assign to dictionary object
+ */
+ndict::ndict(const int &Value) CST(TNUMBER,std::to_string(Value))
+
+/*!\brief Constructor for unsigned integer values
+ * \param Value Value to assign to dictionary object
+ */
+ndict::ndict(const unsigned int &Value) CST(TNUMBER,std::to_string(Value))
+
+/*!\brief Constructor for unsigned long values
+ * \param Value Value to assign to dictionary object
+ */
+ndict::ndict(const unsigned long &Value) CST(TNUMBER,std::to_string(Value))
+
+/*!\brief Constructor for unsigned long long values
+ * \param Value Value to assign to dictionary object
+ */
+ndict::ndict(const unsigned long long &Value) CST(TNUMBER,std::to_string(Value))
+
+/*!\brief Constructor for double values
+ * \param Value Value to assign to dictionary object
+ */
+ndict::ndict(const double &Value) CST(TNUMBER,std::to_string(Value))
+
+/*!\brief Default constructor
+ */
+ndict::ndict() CST(TNULL,"")
 
 /*!\brief Comparison operator for dictionary object
  * \param Value Dictionary object to compare to
@@ -70,61 +149,61 @@ bool ndict::operator==(const unsigned long &Value) const {char *e; return strtou
  */
 bool ndict::operator==(const unsigned long long &Value) const {char *e; return strtoull(value.c_str(),&e,10)==Value && (*e==0||*e=='.');}
 
-/*!\brief Assignemnt operator for boolean values
+/*!\brief Assignment operator for boolean values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const bool &Value) SET(TBOOL,Value?"true":"false")
 
-/*!\brief Assignemnt operator for boolean values
+/*!\brief Assignment operator for boolean values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const std::string &Value) SET(TSTRING,Value)
 
-/*!\brief Assignemnt operator for boolean values
+/*!\brief Assignment operator for boolean values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const char *Value) SET(TSTRING,Value)
 
-/*!\brief Assignemnt operator for long long integer values
+/*!\brief Assignment operator for long long integer values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const long long &Value) SET(TNUMBER,std::to_string(Value))
 
-/*!\brief Assignemnt operator for long integer values
+/*!\brief Assignment operator for long integer values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const long &Value) SET(TNUMBER,std::to_string(Value))
 
-/*!\brief Assignemnt operator for integer values
+/*!\brief Assignment operator for integer values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const int &Value) SET(TNUMBER,std::to_string(Value))
 
-/*!\brief Assignemnt operator for unsigned integer values
+/*!\brief Assignment operator for unsigned integer values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const unsigned int &Value) SET(TNUMBER,std::to_string(Value))
 
-/*!\brief Assignemnt operator for unsigned long values
+/*!\brief Assignment operator for unsigned long values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const unsigned long &Value) SET(TNUMBER,std::to_string(Value))
 
-/*!\brief Assignemnt operator for unsigned long long values
+/*!\brief Assignment operator for unsigned long long values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
 ndict& ndict::operator=(const unsigned long long &Value) SET(TNUMBER,std::to_string(Value))
 
-/*!\brief Assignemnt operator for double values
+/*!\brief Assignment operator for double values
  * \param Value Value to assign to dictionary object
  * \return Reference to assigned dictionary object
  */
@@ -188,7 +267,7 @@ void ndict::remove(const unsigned &index){
 ndict& ndict::operator[](const unsigned &Index){
     // Check bounds
     if(Index>NDICT_MAX_ARRAY_SIZE){
-        throw ndict_exception("Array index is out of bound");
+        throw ndict_exception(this,"Array index is out of bound");
     }
 
     // Clear non-array values
@@ -244,10 +323,10 @@ std::vector<std::string> ndict::getkeys() const{
  */
 std::string ndict::getstring() const{
 #if NDICT_CHECK_EXISTING
-    if(type==TNULL) throw ndict_exception("Value is not set!");
+    if(type==TNULL) throw ndict_exception(this,"Value is not set!");
 #endif
 #if NDICT_CHECK_TYPE
-    if(type!=TSTRING) throw ndict_exception("Value is not string!");
+    if(type!=TSTRING) throw ndict_exception(this,"Value is not string!");
 #endif
     return value;
 }
@@ -257,10 +336,10 @@ std::string ndict::getstring() const{
  */
 const char *ndict::getchar() const{
 #if NDICT_CHECK_EXISTING
-    if(type==TNULL) throw ndict_exception("Value is not set!");
+    if(type==TNULL) throw ndict_exception(this,"Value is not set!");
 #endif
 #if NDICT_CHECK_TYPE
-    if(type!=TSTRING) throw ndict_exception("Value is not string!");
+    if(type!=TSTRING) throw ndict_exception(this,"Value is not string!");
 #endif
     return value.c_str();
 }
@@ -270,10 +349,10 @@ const char *ndict::getchar() const{
  */
 int ndict::getint() const{
 #if NDICT_CHECK_EXISTING
-    if(type==TNULL) throw ndict_exception("Value is not set!");
+    if(type==TNULL) throw ndict_exception(this,"Value is not set!");
 #endif
 #if NDICT_CHECK_TYPE
-    if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
+    if(type!=TNUMBER) throw ndict_exception(this,"Value is not numeric!");
 #endif
     char *e=0;
     int v=strtol(value.c_str(),&e,10);
@@ -285,10 +364,10 @@ int ndict::getint() const{
  */
 long ndict::getlong() const{
 #if NDICT_CHECK_EXISTING
-    if(type==TNULL) throw ndict_exception("Value is not set!");
+    if(type==TNULL) throw ndict_exception(this,"Value is not set!");
 #endif
 #if NDICT_CHECK_TYPE
-    if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
+    if(type!=TNUMBER) throw ndict_exception(this,"Value is not numeric!");
 #endif
     char *e=0;
     long v=strtol(value.c_str(),&e,10);
@@ -300,10 +379,10 @@ long ndict::getlong() const{
  */
 long long ndict::getlonglong() const{
 #if NDICT_CHECK_EXISTING
-    if(type==TNULL) throw ndict_exception("Value is not set!");
+    if(type==TNULL) throw ndict_exception(this,"Value is not set!");
 #endif
 #if NDICT_CHECK_TYPE
-    if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
+    if(type!=TNUMBER) throw ndict_exception(this,"Value is not numeric!");
 #endif
     char *e=0;
     long long v=strtoll(value.c_str(),&e,10);
@@ -315,10 +394,10 @@ long long ndict::getlonglong() const{
  */
 unsigned int ndict::getuint() const{
 #if NDICT_CHECK_EXISTING
-    if(type==TNULL) throw ndict_exception("Value is not set!");
+    if(type==TNULL) throw ndict_exception(this,"Value is not set!");
 #endif
 #if NDICT_CHECK_TYPE
-    if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
+    if(type!=TNUMBER) throw ndict_exception(this,"Value is not numeric!");
 #endif
     char *e=0;
     unsigned int v=strtoul(value.c_str(),&e,10);
@@ -330,10 +409,10 @@ unsigned int ndict::getuint() const{
  */
 unsigned long ndict::getulong() const{
 #if NDICT_CHECK_EXISTING
-    if(type==TNULL) throw ndict_exception("Value is not set!");
+    if(type==TNULL) throw ndict_exception(this,"Value is not set!");
 #endif
 #if NDICT_CHECK_TYPE
-    if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
+    if(type!=TNUMBER) throw ndict_exception(this,"Value is not numeric!");
 #endif
     char *e=0;
     unsigned long v=strtoul(value.c_str(),&e,10);
@@ -345,10 +424,10 @@ unsigned long ndict::getulong() const{
  */
 unsigned long long ndict::getulonglong() const{
 #if NDICT_CHECK_EXISTING
-    if(type==TNULL) throw ndict_exception("Value is not set!");
+    if(type==TNULL) throw ndict_exception(this,"Value is not set!");
 #endif
 #if NDICT_CHECK_TYPE
-    if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
+    if(type!=TNUMBER) throw ndict_exception(this,"Value is not numeric!");
 #endif
     char *e=0;
     unsigned long long v=strtoull(value.c_str(),&e,10);
@@ -360,10 +439,10 @@ unsigned long long ndict::getulonglong() const{
  */
 double ndict::getdouble() const{
 #if NDICT_CHECK_EXISTING
-    if(type==TNULL) throw ndict_exception("Value is not set!");
+    if(type==TNULL) throw ndict_exception(this,"Value is not set!");
 #endif
 #if NDICT_CHECK_TYPE
-    if(type!=TNUMBER) throw ndict_exception("Value is not numeric!");
+    if(type!=TNUMBER) throw ndict_exception(this,"Value is not numeric!");
 #endif
     char *e=0;
     double v=strtod(value.c_str(),&e);
@@ -375,10 +454,10 @@ double ndict::getdouble() const{
  */
 bool ndict::getbool() const{
 #if NDICT_CHECK_EXISTING
-    if(type==TNULL) throw ndict_exception("Value is not set!");
+    if(type==TNULL) throw ndict_exception(this,"Value is not set!");
 #endif
 #if NDICT_CHECK_TYPE
-    if(type!=TBOOL) throw ndict_exception("Value is not boolean!");
+    if(type!=TBOOL) throw ndict_exception(this,"Value is not boolean!");
 #endif
     std::string v=value;
     std::transform(v.begin(),v.end(),v.begin(),::toupper);

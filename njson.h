@@ -16,7 +16,7 @@ class njson_exception: public std::exception {
         std::string msg;
     public:
         njson_exception(const std::string &message) : msg(message) {}
-        const char *what(){return msg.c_str();}
+        const char *what() const noexcept {return msg.c_str();}
 };
 
 /*!\class njson
