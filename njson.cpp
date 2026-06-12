@@ -305,7 +305,7 @@ bool njson::write(const std::string &path,const std::string &json){
 
 /*!\brief Writes a JSON string to a file
  * \param path Path to JSON file to write
- * \param json JSON string to write
+ * \param dict Dictionary object to encode and write
  * \return True upon success
  *
  * Throws njson_exception upon encoding error
